@@ -1,29 +1,45 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar app>
+      <v-toolbar-title>教学资源开放平台</v-toolbar-title>
+      <v-spacer />
+      <v-toolbar-items>
+        <v-btn text to="/">首页</v-btn>
+        <v-btn text to="/login" v-if="!loggedIn">登陆</v-btn>
+        <v-btn text to="/info">同步信息</v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
+    <v-content>
+      <v-container fluid fill-height>
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+
+    <v-footer app>
+      <!-- -->
+    </v-footer>
+
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script>
+import { isLoggedIn } from "@/db/user";
+
+export default {
+  name: "App",
+  data: () => ({
+    loading: true,
+    loggedIn: false
+  }),
+  async mounted() {
+    this.loggedIn = await isLoggedIn()
+    this.loading = false
+  },
+  methods: {
+    //
   }
 }
-</style>
+</script>
