@@ -2,7 +2,7 @@
   <v-system-bar app window style="-webkit-app-region: drag">
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
+        <v-btn text color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
       </template>
       <v-list dense>
         <v-list-item to="/login">
@@ -16,6 +16,22 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn text v-on="on" style="-webkit-app-region: no-drag">帮助</v-btn>
+      </template>
+      <v-list dense>
+        <v-list-item @click="openUrl('https://github.com/creativeschool/heptagon')">
+          <v-list-item-title>开源项目</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="openUrl('https://github.com/creativeschool/heptagon/blob/master/LICENSE')">
+          <v-list-item-title>开源许可</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/about">
+          <v-list-item-title>关于</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <v-spacer></v-spacer>
     {{title}}{{ title ? ' - ' : '' }}教学资源开放平台
     <v-spacer></v-spacer>
@@ -26,7 +42,7 @@
 </template>
 
 <script>
-import { minimize, maximize, close, devTools } from '@/plugins/electron'
+import { minimize, maximize, close, devTools, openUrl } from '@/plugins/electron'
 import { bus } from '@/plugins/bus'
 
 export default {
@@ -47,7 +63,8 @@ export default {
     devTools () {
       bus.$emit('toast', '仅供开发人员使用')
       devTools()
-    }
+    },
+    openUrl
   },
   mounted () {
     bus.$on('title', title => {
