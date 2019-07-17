@@ -1,7 +1,8 @@
 import '@mdi/font/css/materialdesignicons.css'
-import './sw/client'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import './db'
 import Vue from 'vue'
-import App from './App.vue'
+import App from './app.vue'
 import router from '@/plugins/router'
 import vuetify from '@/plugins/vuetify'
 

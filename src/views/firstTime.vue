@@ -13,9 +13,9 @@
 
 <script>
 export default {
-  name: "firstTime",
+  name: 'firstTime',
   data: () => ({}),
-  async mounted() {
+  async mounted () {
     //
   }
 }

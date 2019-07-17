@@ -1,10 +1,26 @@
 <template>
   <v-layout wrap align-content-start>
-    <v-flex xs12>
-      <v-card class="ma-2">
-        <v-card-title>数据库</v-card-title>
+    <v-flex xs12 class="mb-2">
+      <v-card>
+        <v-card-title>同步操作</v-card-title>
         <v-card-text>
-          <v-simple-table>
+          <v-btn @click="syncCourse">触发课程同步</v-btn>
+          <v-btn @click="syncUser">触发用户同步</v-btn>
+          <v-btn color="error" @click="reinitDb">重置数据库</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+    <v-flex xs12 class="mb-2">
+      <v-card>
+        <v-card-title>
+          数据库
+          <v-spacer/>
+          <v-btn icon @click="loadStats">
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-simple-table dense>
             <thead>
               <tr>
                 <th class="text-xs-left">数据库名</th>
@@ -12,7 +28,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in stats" :key="item[0]">
+              <tr v-for="(item, i) in stats" :key="i">
                 <td>{{ item[0] }}</td>
                 <td>{{ item[1] }}</td>
               </tr>
@@ -21,30 +37,109 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs12>
-      <v-card class="ma-2">
-        <v-card-title>登陆信息</v-card-title>
-        <v-card-text></v-card-text>
+    <v-flex xs12 class="mb-2">
+      <v-card>
+        <v-card-title>
+          日志
+          <v-spacer/>
+          <v-btn icon @click="loadLog">
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+          <v-btn icon @click="exportLog">
+            <v-icon>mdi-json</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-data-table dense multi-sort :headers="logHeaders" :items="logs" item-key="id" show-group-by>
+            <template v-slot:item.issuer="{ item }">
+              <code>{{ item.issuer }}</code>
+            </template>
+            <template v-slot:item.created="{ item }">
+              {{ formatDate(item.created) }}
+            </template>
+          </v-data-table>
+        </v-card-text>
       </v-card>
     </v-flex>
-    <v-overlay absolute :value="loading">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    <v-flex xs12 class="mb-2">
+      <v-card>
+        <v-card-title>
+          系统设置
+          <v-spacer/>
+          <v-btn icon @click="loadConfig">
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-simple-table dense>
+            <thead>
+              <th>key</th>
+              <th>value</th>
+            </thead>
+            <tbody>
+              <tr v-for="(item, i) in configs" :key="i">
+                <td><code>{{ item.key }}</code></td>
+                <td><code>{{ item.value }}</code></td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-card-text>
+      </v-card>
+    </v-flex>
   </v-layout>
 </template>
 
 <script>
-import { getStats } from "@/db/stats";
+import { getStats } from '@/db/stats'
+import { syncUser } from '@/db/user'
+import { syncCourse } from '@/db/course'
+import { configs } from '@/db/config'
+import { logs } from '@/db/log'
+import { reinit } from '@/db/dexie'
+import { formatDate } from '@/plugins/formatter'
+import { saveAs } from 'file-saver'
+import { bus } from '../plugins/bus'
 
 export default {
-  name: "info",
+  name: 'info',
   data: () => ({
-    loading: true,
-    stats: []
+    stats: [],
+    configs: [],
+    logs: [],
+    logHeaders: [
+      { text: 'ID', value: 'id' },
+      { text: '记录者', value: 'issuer' },
+      { text: '时间', value: 'created' },
+      { text: '内容', value: 'msg', sortable: false }
+    ]
   }),
-  async mounted(){
-    this.stats = await getStats()
-    this.loading = false
+  mounted () {
+    bus.$emit('title', '同步信息')
+  },
+  methods: {
+    async loadStats () {
+      this.stats = await getStats()
+    },
+    async loadConfig () {
+      this.configs = await configs.toArray()
+    },
+    async loadLog () {
+      this.logs = await logs.toArray()
+    },
+    async syncUser () {
+      await syncUser()
+    },
+    async syncCourse () {
+      await syncCourse()
+    },
+    async reinitDb () {
+      await reinit()
+    },
+    async exportLog () {
+      await this.loadLog()
+      saveAs(new Blob([JSON.stringify(this.logs)], { type: 'text/plain;charset=utf-8' }), 'logs.json')
+    },
+    formatDate
   }
-};
+}
 </script>

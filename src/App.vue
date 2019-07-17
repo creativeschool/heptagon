@@ -1,11 +1,11 @@
 <template>
   <v-app>
+    <system-bar></system-bar>
     <v-app-bar app>
       <v-toolbar-title>教学资源开放平台</v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
         <v-btn text to="/">首页</v-btn>
-        <v-btn text to="/login" v-if="!loggedIn">登陆</v-btn>
         <v-btn text to="/info">同步信息</v-btn>
       </v-toolbar-items>
     </v-app-bar>
@@ -19,27 +19,41 @@
       <!-- -->
     </v-footer>
 
-    <v-overlay :value="loading">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
+    <v-snackbar v-model="snackbar" bottom right :timeout="5000">
+      {{ toast }}
+      <v-btn dark text @click="snackbar = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
-import { isLoggedIn } from "@/db/user";
+import { bus } from '@/plugins/bus'
+import systemBar from '@/components/systemBar'
 
 export default {
-  name: "App",
+  name: 'App',
+  components: {
+    systemBar
+  },
   data: () => ({
     loading: true,
-    loggedIn: false
+    loggedIn: false,
+    loadLog: [],
+    toast: '',
+    snackbar: false
   }),
-  async mounted() {
-    this.loggedIn = await isLoggedIn()
-    this.loading = false
-  },
   methods: {
-    //
+    showToast (text) {
+      this.snackbar = true
+      this.toast = text
+    }
+  },
+  mounted () {
+    bus.$on('toast', msg => this.showToast(msg))
+  },
+  errorCaptured (err, vm, info) {
+    console.log(info)
+    this.showToast(err.message)
   }
 }
 </script>
