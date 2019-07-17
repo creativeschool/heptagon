@@ -6,7 +6,7 @@
       </template>
       <v-list dense>
         <v-list-item to="/login">
-          <v-list-item-title>登陆</v-list-item-title>
+          <v-list-item-title>登录</v-list-item-title>
         </v-list-item>
         <v-list-item @click="devTools">
           <v-list-item-title>开发者工具</v-list-item-title>

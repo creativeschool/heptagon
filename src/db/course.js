@@ -9,7 +9,7 @@ const log = debug('hep:db:course')
 export const courses = db.courses
 
 export const syncCourse = async () => {
-  if (!await isLoggedIn()) throw new Error('需要登陆')
+  if (!await isLoggedIn()) throw new Error('需要登录')
   const count = await courses.count()
   log('Current course count = ' + count)
   const last = count ? (await courses.orderBy('updated').offset(count - 1).limit(1).toArray())[0].updated : 0

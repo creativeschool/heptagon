@@ -4,9 +4,10 @@
       <v-card>
         <v-card-title>同步操作</v-card-title>
         <v-card-text>
-          <v-btn @click="syncCourse">触发课程同步</v-btn>
-          <v-btn @click="syncUser">触发用户同步</v-btn>
-          <v-btn color="error" @click="reinitDb">重置数据库</v-btn>
+          <v-btn @click="syncCourse" class="ma-2">触发课程同步</v-btn>
+          <v-btn @click="syncUser" class="ma-2">触发用户同步</v-btn>
+          <br/>
+          <v-btn color="error" @click="reinitDb" class="ma-2">重置数据库</v-btn>
         </v-card-text>
       </v-card>
     </v-flex>

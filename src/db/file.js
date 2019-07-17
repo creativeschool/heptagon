@@ -13,7 +13,7 @@ export const files = db.files
  * @param {string} course
  */
 export const syncFile = async (course) => {
-  if (!await isLoggedIn()) throw new Error('需要登陆')
+  if (!await isLoggedIn()) throw new Error('需要登录')
   const obj = await getCourse(course)
   if (!obj) throw new Error('No such course')
   const count = await files.where('course').equals(course).count()

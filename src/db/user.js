@@ -29,8 +29,14 @@ export const isLoggedIn = async () => {
   return true
 }
 
+export const getTokenDetails = async () => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const info = await axios.get('/token/detail')
+  await set('current-user', info.user)
+}
+
 export const syncUser = async () => {
-  if (!await isLoggedIn()) throw new Error('需要登陆')
+  if (!await isLoggedIn()) throw new Error('需要登录')
   const count = await users.count()
   log('Current user count = ' + count)
   const last = count ? (await users.orderBy('updated').offset(count - 1).limit(1).toArray())[0].updated : 0

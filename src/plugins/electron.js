@@ -7,3 +7,4 @@ export const maximize = () => currentWindow.isMaximized() ? currentWindow.restor
 export const minimize = () => currentWindow.minimize()
 export const devTools = () => currentWindow.webContents.openDevTools()
 export const openUrl = (url) => shell.openExternal(url)
+export const versions = process.versions
