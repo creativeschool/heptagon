@@ -28,7 +28,7 @@
 
 <script>
 import { bus } from '@/plugins/bus'
-import systemBar from '@/components/systemBar'
+import systemBar from '@/components/systembar'
 
 export default {
   name: 'App',

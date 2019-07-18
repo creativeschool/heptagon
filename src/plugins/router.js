@@ -32,6 +32,18 @@ export default new Router({
       name: 'course',
       props: true,
       component: () => import(/* webpackChunkName: "course" */'@/views/course.vue')
+    },
+    {
+      path: '/course/:_id/file',
+      name: 'file',
+      props: true,
+      component: () => import(/* webpackChunkName: "course" */'@/views/file.vue')
+    },
+    {
+      path: '/course/:_id/msg',
+      name: 'msg',
+      props: true,
+      component: () => import(/* webpackChunkName: "course" */'@/views/msg.vue')
     }
   ]
 })
