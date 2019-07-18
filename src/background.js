@@ -1,10 +1,9 @@
 'use strict'
 
 import { app, protocol, BrowserWindow } from 'electron'
-import {
-  createProtocol,
-  installVueDevtools
-} from 'vue-cli-plugin-electron-builder/lib'
+import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import path from 'path'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -13,6 +12,8 @@ let win
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
+
+/* global __static */
 
 function createWindow () {
   // Create the browser window.
@@ -26,7 +27,8 @@ function createWindow () {
         sansSerif: '微软雅黑 Light'
       }
     },
-    frame: false
+    frame: false,
+    icon: path.join(__static, 'logo.png')
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

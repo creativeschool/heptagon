@@ -1,5 +1,8 @@
 <template>
   <v-system-bar app window style="-webkit-app-region: drag">
+    <v-avatar>
+      <img src="../../public/logo.png"/>
+    </v-avatar>
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
         <v-btn text color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
