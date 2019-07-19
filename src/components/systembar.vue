@@ -1,11 +1,11 @@
 <template>
   <v-system-bar app window style="-webkit-app-region: drag">
-    <v-avatar>
+    <v-avatar size="32" class="mr-2">
       <img src="../../public/logo.png"/>
     </v-avatar>
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn text color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
+        <v-btn color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
       </template>
       <v-list dense>
         <v-list-item to="/login">

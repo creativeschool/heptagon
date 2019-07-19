@@ -4,17 +4,25 @@
       <v-card>
         <v-card-title>关于</v-card-title>
         <v-card-text>
-          <v-layout justify-space-between align-content-start>
+          <v-layout justify-center>
+            <img src="@/../public/logo.png" class="logo"/>
+          </v-layout>
+          <v-layout justify-center>
+            版本： {{ version }}
+          </v-layout>
+          <v-card-title>特别支持</v-card-title>
+          <v-layout justify-space-around align-content-start>
             <v-flex xs4 class="pa-4">
-              <img src="@/assets/vue.png" width="100%" @click="openUrl('https://vuejs.org/')" style="cursor: pointer"/>
+              <img src="@/assets/vue.png" width="100%" @click="openUrl('https://vuejs.org/')" style="cursor: pointer" class="dep"/>
             </v-flex>
             <v-flex xs4 class="pa-4">
-              <img src="@/assets/vuetify.png" width="100%" @click="openUrl('https://vuetifyjs.com')" style="cursor: pointer"/>
+              <img src="@/assets/vuetify.png" width="100%" @click="openUrl('https://vuetifyjs.com')" style="cursor: pointer" class="dep"/>
             </v-flex>
             <v-flex xs4 class="pa-4">
-              <img src="@/assets/electron.png" width="100%" @click="openUrl('https://electronjs.org/')" style="cursor: pointer"/>
+              <img src="@/assets/electron.png" width="100%" @click="openUrl('https://electronjs.org/')" style="cursor: pointer" class="dep"/>
             </v-flex>
           </v-layout>
+          <v-card-title>详细版本</v-card-title>
           <v-simple-table dense>
             <tbody>
               <tr v-for="(ver, i) in versions" :key="i">
@@ -36,11 +44,13 @@
 
 <script>
 import { versions, openUrl } from '@/plugins/electron'
+import { version } from '@/../package.json'
 
 export default {
   name: 'about',
   data: () => ({
-    versions: []
+    versions: [],
+    version
   }),
   mounted () {
     for (const key in versions) {
@@ -52,3 +62,14 @@ export default {
   }
 }
 </script>
+
+<style>
+.logo {
+  max-width: 256px;
+  max-height: 256px;
+}
+.dep {
+  max-width: 128px;
+  max-height: 128px;
+}
+</style>
