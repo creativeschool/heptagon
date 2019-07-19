@@ -15,8 +15,10 @@
       </v-container>
     </v-content>
 
-    <v-footer app>
-      <!-- -->
+    <v-footer app padless>
+      <v-flex text-xs-center xs12>
+        版本 {{ version }}
+      </v-flex>
     </v-footer>
 
     <v-snackbar v-model="snackbar" bottom right :timeout="5000">
@@ -29,6 +31,7 @@
 <script>
 import { bus } from '@/plugins/bus'
 import systemBar from '@/components/systembar'
+import { version } from '@/../package.json'
 
 export default {
   name: 'App',
@@ -40,7 +43,8 @@ export default {
     loggedIn: false,
     loadLog: [],
     toast: '',
-    snackbar: false
+    snackbar: false,
+    version
   }),
   methods: {
     showToast (text) {
