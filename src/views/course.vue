@@ -20,11 +20,11 @@
               </tr>
               <tr>
                 <td>文件操作限制前缀</td>
-                <td><code>`{{ course.priv.scope }}`</code></td>
+                <td>{{ course.priv.scope }}</td>
               </tr>
               <tr>
                 <td>文件下载限制前缀</td>
-                <td><code>`{{ course.priv.allowver }}`</code></td>
+                <td>{{ course.priv.allowver ? course.priv.allowver : '无限制' }}</td>
               </tr>
               <tr>
                 <td>通知操作</td>
@@ -32,7 +32,7 @@
               </tr>
               <tr>
                 <td>编号</td>
-                <td><code>{{ course._id }}</code></td>
+                <td>{{ course._id }}</td>
               </tr>
             </tbody>
           </v-simple-table>

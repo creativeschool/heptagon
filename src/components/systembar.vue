@@ -38,18 +38,23 @@
     <v-spacer></v-spacer>
     {{title}}{{ title ? ' - ' : '' }}教学资源开放平台
     <v-spacer></v-spacer>
-    <v-icon icon @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
-    <v-icon icon @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
-    <v-icon icon @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
+    <current-user/>
+    <v-icon @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
+    <v-icon @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
+    <v-icon @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
   </v-system-bar>
 </template>
 
 <script>
 import { minimize, maximize, close, devTools, openUrl } from '@/plugins/electron'
 import { bus } from '@/plugins/bus'
+import currentUser from '@/components/currentuser.vue'
 
 export default {
   name: 'systemBar',
+  components: {
+    currentUser
+  },
   data: () => ({
     title: ''
   }),

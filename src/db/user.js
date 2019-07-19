@@ -9,14 +9,14 @@ const log = debug('hep:db:user')
 export const users = db.users
 
 /**
- * User login
+ * User signin
  * **Warning! Will drop the whole IndexDB!**
- * @param {string} name
+ * @param {string} login
  * @param {string} pass
  */
-export const login = async (name, pass) => {
+export const signin = async (login, pass) => {
   await reinit()
-  const res = await axios.post('/login', { name, pass })
+  const res = await axios.post('/signin', { login, pass })
   log(res.data)
   axios.defaults.headers['x-access-token'] = res.data
   await set('x-access-token', res.data)
@@ -32,7 +32,7 @@ export const isLoggedIn = async () => {
 export const getTokenDetails = async () => {
   if (!await isLoggedIn()) throw new Error('需要登录')
   const info = await axios.get('/token/detail')
-  await set('current-user', info.user)
+  await set('current-user', info.data.user)
 }
 
 export const syncUser = async () => {
@@ -45,4 +45,15 @@ export const syncUser = async () => {
   log(`Fetched ${res.data.length} users`)
   await users.bulkPut(res.data)
   bus.$emit('toast', `用户同步成功：${res.data.length}条记录已更新`)
+  bus.$emit('chrome_update')
+}
+
+/**
+ * @param {string} _id
+ */
+export const getUser = async (_id) => {
+  log(`Get user ${_id}`)
+  let user = await users.get(_id)
+  if (user) return user
+  throw new Error('无此用户')
 }

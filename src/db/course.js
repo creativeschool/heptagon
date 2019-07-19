@@ -20,12 +20,15 @@ export const syncCourse = async () => {
   bus.$emit('toast', `课程同步成功：${res.data.length}条记录已更新`)
 }
 
+/**
+ * @param {string} _id
+ */
 export const getCourse = async (_id) => {
   log(`Get course ${_id}`)
   let course = await courses.get(_id)
   if (course) return course
-  await syncCourse()
-  course = await courses.get(_id)
-  if (course) return course
+  // await syncCourse()
+  // course = await courses.get(_id)
+  // if (course) return course
   throw new Error('无此课程')
 }
