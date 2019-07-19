@@ -39,9 +39,6 @@ export default {
     systemBar
   },
   data: () => ({
-    loading: true,
-    loggedIn: false,
-    loadLog: [],
     toast: '',
     snackbar: false,
     version

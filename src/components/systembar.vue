@@ -5,7 +5,7 @@
     </v-avatar>
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
+        <v-btn text color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
       </template>
       <v-list dense>
         <v-list-item to="/login">

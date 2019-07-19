@@ -15,4 +15,5 @@ export const reinit = async () => {
   await db.delete()
   await db.open()
   bus.$emit('toast', '数据库初始化成功')
+  bus.$emit('chrome_update')
 }

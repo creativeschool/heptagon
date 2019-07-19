@@ -23,9 +23,6 @@
             </tbody>
           </v-simple-table>
         </v-card-text>
-        <v-overlay absolute :value="!isLoggedIn">
-          <v-icon>mdi-account-alert</v-icon> <router-link to="/login">请登录</router-link>
-        </v-overlay>
       </v-card>
     </v-flex>
   </v-layout>
@@ -40,12 +37,11 @@ import { bus } from '../plugins/bus'
 export default {
   name: 'home',
   data: () => ({
-    courses: [],
-    isLoggedIn: true
+    courses: []
   }),
   mounted () {
-    this.loadCourse()
     this.loadLogin()
+    this.loadCourse()
     bus.$emit('title', '')
   },
   methods: {
@@ -53,7 +49,9 @@ export default {
       this.courses = await courses.toArray()
     },
     async loadLogin () {
-      this.isLoggedIn = await isLoggedIn()
+      if (!await isLoggedIn()) {
+        this.$router.replace('/login')
+      }
     },
     formatDate
   }
