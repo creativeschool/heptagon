@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-content-start justify-space-between wrap>
+  <v-layout align-start justify-space-between wrap>
     <v-flex xs12 lg4 class="pa-2">
       <v-card>
         <v-card-title>课程信息</v-card-title>

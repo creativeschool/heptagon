@@ -1,6 +1,6 @@
 <template>
-  <v-layout wrap align-content-start>
-    <v-flex xs12 class="mb-2">
+  <v-layout wrap align-start>
+    <v-flex xs12 lg3 class="pa-2">
       <v-card>
         <v-card-title>同步操作</v-card-title>
         <v-card-text>
@@ -11,7 +11,7 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs12 class="mb-2">
+    <v-flex xs12 lg3 class="pa-2">
       <v-card>
         <v-card-title>
           数据库
@@ -38,7 +38,7 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs12 class="mb-2">
+    <v-flex xs12 lg6 class="pa-2">
       <v-card>
         <v-card-title>
           日志
@@ -62,7 +62,7 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs12 class="mb-2">
+    <v-flex xs12 class="pa-2">
       <v-card>
         <v-card-title>
           系统设置

@@ -1,5 +1,5 @@
 <template>
-  <v-layout justify-space-between>
+  <v-layout justify-space-around align-start>
     <v-flex xs12>
       <v-card>
         <v-card-title>课程信息</v-card-title>
