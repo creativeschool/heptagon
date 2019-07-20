@@ -17,7 +17,7 @@
 
     <v-footer app padless>
       <v-flex text-xs-center xs12>
-        版本 {{ version }}.{{ isElectron ? 'electron' : 'web' }}
+        版本 {{ build.version }}.{{ build.hash }}-{{ build.branch }}({{ isElectron ? 'electron' : 'web' }})
       </v-flex>
     </v-footer>
 
@@ -41,6 +41,8 @@ import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { isLoggedIn, syncUser } from '@/db/user'
 import { syncCourse } from '@/db/course'
 
+/* global GIT_HASH, GIT_BRANCH */
+
 export default {
   name: 'App',
   components: {
@@ -49,9 +51,13 @@ export default {
   data: () => ({
     toast: '',
     snackbar: false,
-    version,
     loading: true,
-    isElectron
+    isElectron,
+    build: {
+      version,
+      hash: GIT_HASH,
+      branch: GIT_BRANCH
+    }
   }),
   methods: {
     showToast (text) {

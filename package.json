@@ -39,6 +39,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "fibers": "^4.0.1",
+    "git-revision": "^0.0.2",
     "node-sass": "^4.12.0",
     "sass": "^1.22.5",
     "sass-loader": "^7.1.0",
