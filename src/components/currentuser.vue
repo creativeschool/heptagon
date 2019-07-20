@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import { get } from '../db/config'
-import { getUser } from '../db/user'
-import { bus } from '../plugins/bus'
+import { get } from '@/db/config'
+import { getUser } from '@/db/user'
+import { bus } from '@/plugins/bus'
 
 export default {
   name: 'currentUser',

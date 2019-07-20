@@ -28,6 +28,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "basic" */'@/views/info.vue')
     },
     {
+      path: '/settings',
+      name: 'settings',
+      component: () => import(/* webpackChunkName: "basic" */'@/views/settings.vue')
+    },
+    {
       path: '/course/:_id',
       name: 'course',
       props: true,

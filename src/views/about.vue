@@ -45,6 +45,7 @@
 <script>
 import { versions, openUrl } from '@/plugins/electron'
 import { version } from '@/../package.json'
+import { bus } from '@/plugins/bus'
 
 export default {
   name: 'about',
@@ -56,6 +57,7 @@ export default {
     for (const key in versions) {
       this.versions.push([key, versions[key]])
     }
+    bus.$emit('title', '关于')
   },
   methods: {
     openUrl

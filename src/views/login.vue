@@ -20,7 +20,8 @@
 <script>
 import { signin, isLoggedIn, syncUser, getTokenDetails } from '@/db/user'
 import { bus } from '@/plugins/bus'
-import { syncCourse } from '../db/course'
+import { syncCourse } from '@/db/course'
+import { syncAccessToken } from '@/plugins/axios'
 
 export default {
   name: 'login',
@@ -36,6 +37,7 @@ export default {
       this.loading = true
       try {
         await signin(this.login, this.pass)
+        await syncAccessToken()
         await getTokenDetails()
         await syncUser()
         await syncCourse()
@@ -54,6 +56,7 @@ export default {
     isLoggedIn().then(x => {
       this.loggedIn = x
     })
+    bus.$emit('title', '登录')
   }
 }
 </script>

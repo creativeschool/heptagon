@@ -31,8 +31,8 @@
 <script>
 import { courses } from '@/db/course'
 import { formatDate } from '@/plugins/formatter'
-import { isLoggedIn } from '../db/user'
-import { bus } from '../plugins/bus'
+import { isLoggedIn } from '@/db/user'
+import { bus } from '@/plugins/bus'
 
 export default {
   name: 'home',

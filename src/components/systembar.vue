@@ -11,6 +11,10 @@
         <v-list-item to="/login">
           <v-list-item-title>登录</v-list-item-title>
         </v-list-item>
+        <v-list-item to="/settings">
+          <v-list-item-title>设置</v-list-item-title>
+        </v-list-item>
+        <v-divider/>
         <v-list-item @click="devTools">
           <v-list-item-title>开发者工具</v-list-item-title>
         </v-list-item>

@@ -99,7 +99,8 @@ import { logs } from '@/db/log'
 import { reinit } from '@/db/dexie'
 import { formatDate } from '@/plugins/formatter'
 import { saveAs } from 'file-saver'
-import { bus } from '../plugins/bus'
+import { bus } from '@/plugins/bus'
+import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 
 export default {
   name: 'info',
@@ -135,6 +136,8 @@ export default {
     },
     async reinitDb () {
       await reinit()
+      await syncBaseUrl()
+      await syncAccessToken()
     },
     async exportLog () {
       await this.loadLog()

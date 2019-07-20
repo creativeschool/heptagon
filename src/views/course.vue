@@ -79,7 +79,7 @@
 import { getCourse } from '@/db/course'
 import { syncFile, files } from '@/db/file'
 import { formatDate } from '@/plugins/formatter'
-import { bus } from '../plugins/bus'
+import { bus } from '@/plugins/bus'
 
 export default {
   name: 'course',

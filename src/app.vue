@@ -17,7 +17,7 @@
 
     <v-footer app padless>
       <v-flex text-xs-center xs12>
-        版本 {{ version }}
+        版本 {{ version }}.{{ isElectron ? 'electron' : 'web' }}
       </v-flex>
     </v-footer>
 
@@ -25,6 +25,10 @@
       {{ toast }}
       <v-btn dark text @click="snackbar = false">关闭</v-btn>
     </v-snackbar>
+
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -32,6 +36,10 @@
 import { bus } from '@/plugins/bus'
 import systemBar from '@/components/systembar'
 import { version } from '@/../package.json'
+import { showErrorBox, isElectron } from '@/plugins/electron'
+import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
+import { isLoggedIn, syncUser } from '@/db/user'
+import { syncCourse } from '@/db/course'
 
 export default {
   name: 'App',
@@ -41,12 +49,27 @@ export default {
   data: () => ({
     toast: '',
     snackbar: false,
-    version
+    version,
+    loading: true,
+    isElectron
   }),
   methods: {
     showToast (text) {
       this.snackbar = true
       this.toast = text
+    }
+  },
+  async created () {
+    try {
+      await syncBaseUrl()
+      await syncAccessToken()
+      if (await isLoggedIn()) {
+        await syncUser()
+        await syncCourse()
+      }
+      this.loading = false
+    } catch (e) {
+      showErrorBox('初始化错误', e.message)
     }
   },
   mounted () {

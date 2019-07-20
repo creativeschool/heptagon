@@ -24,9 +24,7 @@ export const signin = async (login, pass) => {
 
 export const isLoggedIn = async () => {
   const token = await get('x-access-token')
-  if (!token) return false
-  axios.defaults.headers['x-access-token'] = token
-  return true
+  return !!token
 }
 
 export const getTokenDetails = async () => {
