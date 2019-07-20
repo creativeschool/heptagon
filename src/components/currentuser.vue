@@ -8,7 +8,13 @@
     <v-card v-if="!!user">
       <v-img width="240px" height="64px" :src="`https://ui-avatars.com/api/?name=${user.name}&size=256`">
       </v-img>
-      <v-card-title>{{ user.name }}</v-card-title>
+      <v-card-title>
+        {{ user.name }}
+        <v-spacer/>
+        <v-btn icon to="/profile">
+          <v-icon>mdi-account-edit</v-icon>
+        </v-btn>
+      </v-card-title>
       <v-card-text>
         <v-chip v-for="(tag, i) in user.tags" :key="i">{{ tag }}</v-chip>
       </v-card-text>
