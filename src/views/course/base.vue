@@ -54,6 +54,7 @@ export default {
     async sync () {
       this.loading = true
       await syncCourse(this._id)
+      bus.$emit('course-sync')
       this.loading = false
     }
   },
