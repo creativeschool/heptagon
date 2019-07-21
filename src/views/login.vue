@@ -20,8 +20,9 @@
 <script>
 import { signin, isLoggedIn, syncUser, getTokenDetails } from '@/db/user'
 import { bus } from '@/plugins/bus'
-import { syncCourse } from '@/db/course'
 import { syncAccessToken } from '@/plugins/axios'
+import { get } from '@/db/config'
+import { syncUserUcmap } from '@/db/ucmap'
 
 export default {
   name: 'login',
@@ -39,10 +40,9 @@ export default {
         await signin(this.login, this.pass)
         await syncAccessToken()
         await getTokenDetails()
-        await syncUser()
-        await syncCourse()
+        await syncUser(await get('current-user'))
+        await syncUserUcmap()
         bus.$emit('toast', '欢迎！')
-        bus.$emit('chrome_update')
         this.$router.replace('/')
       } catch (e) {
         bus.$emit('toast', '登录错误')

@@ -7,7 +7,7 @@ export const configs = db.configs
 
 /**
  * @param {string} key
- * @param {string} value
+ * @param {any} value
  */
 export const set = async (key, value) => {
   log(`${key} = ${value}`)

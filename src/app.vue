@@ -39,7 +39,8 @@ import { version } from '@/../package.json'
 import { showErrorBox, isElectron } from '@/plugins/electron'
 import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { isLoggedIn, syncUser } from '@/db/user'
-import { syncCourse } from '@/db/course'
+import { get } from './db/config'
+import { syncUserUcmap } from './db/ucmap'
 
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
 
@@ -71,8 +72,8 @@ export default {
       await syncBaseUrl()
       await syncAccessToken()
       if (await isLoggedIn()) {
-        await syncUser()
-        await syncCourse()
+        await syncUser(await get('current-user'))
+        await syncUserUcmap()
       }
     } catch (e) {
       showErrorBox('初始化错误', e.message)

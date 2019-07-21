@@ -9,7 +9,7 @@ export let versions = {
   '版本控制分支': GIT_BRANCH,
   '构建时间': BUILD_DATE,
   '构建机器': BUILD_MACHINE,
-  '运行时': isElectron ? 'Electron' : 'web'
+  '运行时': 'web'
 }
 
 export let close = () => {
@@ -36,6 +36,7 @@ export let reload = () => {
 
 if (typeof process !== 'undefined' && process.versions && process.versions.electron !== undefined) {
   isElectron = true
+  versions['运行时'] = 'electron'
   Object.assign(versions, process.versions)
   const electron = require('electron')
   const remote = electron.remote

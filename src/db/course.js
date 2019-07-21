@@ -2,33 +2,33 @@ import { axios } from '@/plugins/axios'
 import debug from 'debug'
 import { db } from './dexie'
 import { isLoggedIn } from './user'
-import { bus } from '@/plugins/bus'
 
 const log = debug('hep:db:course')
 /** @type {import('dexie').Dexie.Table} */
 export const courses = db.courses
 
-export const syncCourse = async () => {
+/**
+ * @param {string} courseId
+ */
+export const syncCourse = async (courseId) => {
   if (!await isLoggedIn()) throw new Error('需要登录')
-  const count = await courses.count()
-  log('Current course count = ' + count)
-  const last = count ? (await courses.orderBy('updated').offset(count - 1).limit(1).toArray())[0].updated : 0
-  log('Last update = ' + last)
-  const res = await axios.post('/course/sync', { last })
-  log(`Fetched ${res.data.length} courses`)
-  await courses.bulkPut(res.data)
-  bus.$emit('toast', `课程同步成功：${res.data.length}条记录已更新`)
+  const course = await courses.get(courseId)
+  const last = course ? course.lastFetch || 0 : 0
+  log(`Sync course ${courseId} last ${last}`)
+  const now = +new Date()
+  const res = await axios.post('/course/sync', { courseId, last })
+  await courses.put(Object.assign({ lastFetch: now }, res.data))
 }
 
 /**
- * @param {string} _id
+ * @param {string} courseId
  */
-export const getCourse = async (_id) => {
-  log(`Get course ${_id}`)
-  let course = await courses.get(_id)
+export const getCourse = async (courseId) => {
+  log(`Get course ${courseId}`)
+  let course = await courses.get(courseId)
   if (course) return course
   // await syncCourse()
-  // course = await courses.get(_id)
+  // course = await courses.get(courseId)
   // if (course) return course
   throw new Error('无此课程')
 }

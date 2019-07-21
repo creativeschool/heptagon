@@ -22,36 +22,37 @@ export const signin = async (login, pass) => {
   await set('x-access-token', res.data)
 }
 
-export const isLoggedIn = async () => {
-  const token = await get('x-access-token')
-  return !!token
-}
-
 export const getTokenDetails = async () => {
   if (!await isLoggedIn()) throw new Error('需要登录')
   const info = await axios.get('/token/detail')
   await set('current-user', info.data.user)
 }
 
-export const syncUser = async () => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
-  const count = await users.count()
-  log('Current user count = ' + count)
-  const last = count ? (await users.orderBy('updated').offset(count - 1).limit(1).toArray())[0].updated : 0
-  log('Last update = ' + last)
-  const res = await axios.post('/user/sync', { last })
-  log(`Fetched ${res.data.length} users`)
-  await users.bulkPut(res.data)
-  bus.$emit('toast', `用户同步成功：${res.data.length}条记录已更新`)
-  bus.$emit('chrome_update')
+export const isLoggedIn = async () => {
+  const token = await get('x-access-token')
+  return !!token
 }
 
 /**
- * @param {string} _id
+ * @param {string} userId
  */
-export const getUser = async (_id) => {
-  log(`Get user ${_id}`)
-  let user = await users.get(_id)
+export const syncUser = async (userId) => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const user = await users.get(userId)
+  const last = user ? user.lastFetch || 0 : 0
+  log(`Sync user ${userId} last ${last}`)
+  const now = +new Date()
+  const res = await axios.post('/user/sync', { userId, last })
+  await users.put(Object.assign({ lastFetch: now }, res.data))
+  if (userId === await get('current-user')) bus.$emit('chrome_update')
+}
+
+/**
+ * @param {string} userId
+ */
+export const getUser = async (userId) => {
+  log(`Get user ${userId}`)
+  let user = await users.get(userId)
   if (user) return user
   throw new Error('无此用户')
 }
