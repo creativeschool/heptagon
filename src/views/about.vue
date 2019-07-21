@@ -11,7 +11,7 @@
             版本： {{ version }}
           </v-layout>
           <v-card-title>特别支持</v-card-title>
-          <v-layout justify-space-around align-start>
+          <v-layout justify-space-around align-content-start>
             <v-flex xs4 class="pa-4">
               <img src="@/assets/vue.png" width="100%" @click="openUrl('https://vuejs.org/')" style="cursor: pointer" class="dep"/>
             </v-flex>

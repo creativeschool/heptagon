@@ -2,7 +2,7 @@
   <v-app>
     <system-bar></system-bar>
     <v-app-bar app>
-      <v-toolbar-title>教学资源开放平台</v-toolbar-title>
+      <v-toolbar-title>{{ appName }}</v-toolbar-title>
       <v-spacer />
       <v-toolbar-items>
         <v-btn text to="/">首页</v-btn>
@@ -41,7 +41,7 @@ import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { isLoggedIn, syncUser } from '@/db/user'
 import { syncCourse } from '@/db/course'
 
-/* global GIT_HASH, GIT_BRANCH */
+/* global APP_NAME, GIT_HASH, GIT_BRANCH */
 
 export default {
   name: 'App',
@@ -53,6 +53,7 @@ export default {
     snackbar: false,
     loading: true,
     isElectron,
+    appName: APP_NAME,
     build: {
       version,
       hash: GIT_HASH,

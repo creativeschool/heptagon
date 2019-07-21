@@ -39,9 +39,9 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <v-spacer></v-spacer>
-    {{title}}{{ title ? ' - ' : '' }}教学资源开放平台
-    <v-spacer></v-spacer>
+    <v-spacer/>
+    {{ systemTitle }}
+    <v-spacer/>
     <current-user/>
     <v-icon @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
     <v-icon @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
@@ -50,9 +50,11 @@
 </template>
 
 <script>
-import { minimize, maximize, close, devTools, openUrl } from '@/plugins/electron'
+import { minimize, maximize, close, devTools, openUrl, isElectron } from '@/plugins/electron'
 import { bus } from '@/plugins/bus'
 import currentUser from '@/components/currentuser.vue'
+
+/* global APP_NAME */
 
 export default {
   name: 'systemBar',
@@ -78,9 +80,19 @@ export default {
     },
     openUrl
   },
+  computed: {
+    systemTitle () {
+      return `${this.title}${this.title ? ' - ' : ''}${APP_NAME}`
+    }
+  },
   mounted () {
     bus.$on('title', title => {
-      this.title = document.title = title
+      this.title = title
+      if (isElectron) {
+        document.title = title
+      } else {
+        document.title = this.systemTitle
+      }
     })
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap align-start>
+  <v-layout wrap align-content-start>
     <v-flex xs12 lg3 class="pa-2">
       <v-card>
         <v-card-title>同步操作</v-card-title>

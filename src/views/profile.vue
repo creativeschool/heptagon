@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap align-start>
+  <v-layout wrap align-content-start>
     <v-flex xs12 md6 lg4 class="pa-2">
       <v-card>
         <v-card-title>基本信息</v-card-title>
