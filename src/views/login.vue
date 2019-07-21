@@ -1,6 +1,6 @@
 <template>
   <v-layout justify-center align-center>
-    <v-flex sm12 xs3 lg4>
+    <v-flex sm12 xl3 lg4>
       <v-card>
         <v-card-title>登录</v-card-title>
         <v-card-text>
