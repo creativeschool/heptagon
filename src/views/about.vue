@@ -10,7 +10,22 @@
           <v-layout justify-center>
             版本： {{ version }}
           </v-layout>
-          <v-card-title>特别支持</v-card-title>
+        </v-card-text>
+        <v-divider/>
+        <v-card-text>
+          <v-card-title>详细版本</v-card-title>
+          <v-simple-table dense>
+            <tbody>
+              <tr v-for="(ver, i) in versions" :key="i">
+                <td>{{ ver[0] }}</td>
+                <td>{{ ver[1] }}</td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </v-card-text>
+        <v-divider/>
+        <v-card-text>
+          <v-card-title>本项目基于</v-card-title>
           <v-layout justify-space-around align-content-start>
             <v-flex xs4 class="pa-4">
               <img src="@/assets/vue.png" width="100%" @click="openUrl('https://vuejs.org/')" style="cursor: pointer" class="dep"/>
@@ -22,16 +37,8 @@
               <img src="@/assets/electron.png" width="100%" @click="openUrl('https://electronjs.org/')" style="cursor: pointer" class="dep"/>
             </v-flex>
           </v-layout>
-          <v-card-title>详细版本</v-card-title>
-          <v-simple-table dense>
-            <tbody>
-              <tr v-for="(ver, i) in versions" :key="i">
-                <td>{{ ver[0] }}</td>
-                <td>{{ ver[1] }}</td>
-              </tr>
-            </tbody>
-          </v-simple-table>
         </v-card-text>
+        <v-divider/>
         <v-card-actions>
           <v-spacer/>
           <v-btn outlined color="error" @click="openUrl('https://blog.zhangzisu.cn')">Made with ❤ by ZhangZisu</v-btn>

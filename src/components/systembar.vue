@@ -43,9 +43,9 @@
     {{ systemTitle }}
     <v-spacer/>
     <current-user/>
-    <v-icon @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
-    <v-icon @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
-    <v-icon @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
+    <v-icon v-if="isElectron" @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
+    <v-icon v-if="isElectron" @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
+    <v-icon v-if="isElectron" @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
   </v-system-bar>
 </template>
 
@@ -62,7 +62,8 @@ export default {
     currentUser
   },
   data: () => ({
-    title: ''
+    title: '',
+    isElectron
   }),
   methods: {
     minimize () {
@@ -75,7 +76,6 @@ export default {
       close()
     },
     devTools () {
-      bus.$emit('toast', '仅供开发人员使用')
       devTools()
     },
     openUrl

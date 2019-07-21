@@ -1,15 +1,28 @@
+import { bus } from './bus'
+
+/* global GIT_HASH, GIT_BRANCH, BUILD_DATE, BUILD_MACHINE */
+
 export let isElectron = false
 
-export let versions = {}
+export let versions = {
+  '版本控制散列': GIT_HASH,
+  '版本控制分支': GIT_BRANCH,
+  '构建时间': BUILD_DATE,
+  '构建机器': BUILD_MACHINE,
+  '运行时': isElectron ? 'Electron' : 'web'
+}
 
 export let close = () => {
-  window.close()
+  bus.$emit('toast', '不支持')
 }
 export let maximize = () => {
+  bus.$emit('toast', '不支持')
 }
 export let minimize = () => {
+  bus.$emit('toast', '不支持')
 }
 export let devTools = () => {
+  bus.$emit('toast', '请手动打开')
 }
 export let openUrl = (url) => {
   window.open(url)
@@ -23,7 +36,7 @@ export let reload = () => {
 
 if (typeof process !== 'undefined' && process.versions && process.versions.electron !== undefined) {
   isElectron = true
-  versions = process.versions
+  Object.assign(versions, process.versions)
   const electron = require('electron')
   const remote = electron.remote
   const shell = electron.shell
@@ -38,6 +51,7 @@ if (typeof process !== 'undefined' && process.versions && process.versions.elect
     currentWindow.minimize()
   }
   devTools = () => {
+    bus.$emit('toast', '仅供开发人员使用')
     currentWindow.webContents.openDevTools()
   }
   openUrl = (url) => {
