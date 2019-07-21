@@ -23,6 +23,7 @@ import { bus } from '@/plugins/bus'
 import { syncAccessToken } from '@/plugins/axios'
 import { get } from '@/db/config'
 import { syncUserUcmap } from '@/db/ucmap'
+import { syncAllCourse } from '../db/course'
 
 export default {
   name: 'login',
@@ -42,6 +43,7 @@ export default {
         await getTokenDetails()
         await syncUser(await get('current-user'))
         await syncUserUcmap()
+        await syncAllCourse()
         bus.$emit('toast', '欢迎！')
         this.$router.replace('/')
       } catch (e) {

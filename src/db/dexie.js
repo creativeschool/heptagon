@@ -2,10 +2,11 @@ import Dexie from 'dexie'
 import { bus } from '@/plugins/bus'
 
 export const db = new Dexie('heptagon')
-db.version(1).stores({
+
+db.version(2).stores({
   users: `&_id, name, email, *tags`,
   courses: `&_id, name, *tags`,
-  ucmap: `&_id, user, course`,
+  ucmap: `&_id, user, course, [user+course]`,
   files: `&_id, course, path, *tags`,
   msgs: `&_id, course, user, *tags`,
   configs: `&key`,

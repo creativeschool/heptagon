@@ -15,7 +15,7 @@ export const syncMsg = async (courseId) => {
   const obj = await getCourse(courseId)
   const last = await get('msg-sync-' + courseId) || 0
   const now = +new Date()
-  const res = await axios.post('/msg/sync', { courseId, last })
+  const res = await axios.post('/course/msg/sync', { courseId, last })
   log(`@${courseId} fetched ${res.data.length} msgs`)
   await msgs.bulkPut(res.data)
   await set('msg-sync-' + courseId, now)

@@ -88,11 +88,7 @@ export default {
   mounted () {
     bus.$on('title', title => {
       this.title = title
-      if (isElectron) {
-        document.title = title
-      } else {
-        document.title = this.systemTitle
-      }
+      document.title = this.systemTitle
     })
   }
 }
