@@ -4,19 +4,23 @@
       <v-card>
         <v-card-title>
           {{ course.name }}
+          <v-spacer/>
+          <v-btn icon @click="sync" :disabled="!this._id" :loading="loading">
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text>
           <v-list>
-            <v-list-item :to="`/course/${_id}`">
+            <v-list-item :to="`/course/${_id}`" exact>
               <v-list-item-title>基本信息</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="`/course/${_id}/member`">
+            <v-list-item :to="`/course/${_id}/member`" exact>
               <v-list-item-title>成员列表</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="`/course/${_id}/msg`">
+            <v-list-item :to="`/course/${_id}/msg`" exact>
               <v-list-item-title>消息通知</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="`/course/${_id}/file`">
+            <v-list-item :to="`/course/${_id}/file`" exact>
               <v-list-item-title>文件管理</v-list-item-title>
             </v-list-item>
           </v-list>
@@ -32,26 +36,32 @@
 </template>
 
 <script>
-import { getCourse } from '@/db/course'
-import { formatDate } from '@/plugins/formatter'
+import { getCourse, syncCourse } from '@/db/course'
 import { bus } from '@/plugins/bus'
-import { getPriv } from '@/db/ucmap'
-import { get } from '@/db/config'
 
 export default {
   name: 'course',
   props: ['_id'],
   data: () => ({
     course: {},
-    priv: {}
+    loading: false
   }),
   methods: {
     async load () {
       this.course = await getCourse(this._id)
-      this.priv = await getPriv(await get('current-user'), this._id)
       bus.$emit('title', this.course.name)
     },
-    formatDate
+    async sync () {
+      this.loading = true
+      await syncCourse(this._id)
+      this.loading = false
+    }
+  },
+  mounted () {
+    bus.$on('course-sync', this.load)
+  },
+  beforeDestroy () {
+    bus.$off('course-sync', this.load)
   },
   watch: {
     _id: {

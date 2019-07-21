@@ -3,6 +3,7 @@ import debug from 'debug'
 import { db, reinit } from './dexie'
 import { set, get } from './config'
 import { bus } from '@/plugins/bus'
+import { minObjectSyncInterval } from './limits'
 
 const log = debug('hep:db:user')
 /** @type {import('dexie').Dexie.Table} */
@@ -42,6 +43,7 @@ export const syncUser = async (userId) => {
   const last = user ? user.lastFetch || 0 : 0
   log(`Sync user ${userId} last ${last}`)
   const now = +new Date()
+  if (now - last < minObjectSyncInterval) return
   const res = await axios.post('/user/sync', { userId, last })
   await users.put(Object.assign({ lastFetch: now }, res.data))
   if (userId === await get('current-user')) bus.$emit('chrome_update')

@@ -5,6 +5,7 @@ import { isLoggedIn } from './user'
 import { bus } from '@/plugins/bus'
 import { getCourse } from './course'
 import { get, set } from './config'
+import { minArraySyncInterval } from './limits'
 
 const log = debug('hep:db:file')
 /** @type {import('dexie').Dexie.Table} */
@@ -18,6 +19,7 @@ export const syncFile = async (courseId) => {
   const obj = await getCourse(courseId)
   const last = await get('file-sync-' + courseId) || 0
   const now = +new Date()
+  if (now - last < minArraySyncInterval) return
   const res = await axios.post('/course/file/sync', { courseId, last })
   log(`@${courseId} fetched ${res.data.length} files`)
   await files.bulkPut(res.data)

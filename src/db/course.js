@@ -1,9 +1,10 @@
 import { axios } from '@/plugins/axios'
 import debug from 'debug'
 import { db } from './dexie'
-import { isLoggedIn } from './user'
+import { isLoggedIn, users } from './user'
 import { ucmap } from './ucmap'
 import { get } from './config'
+import { minObjectSyncInterval } from './limits'
 
 const log = debug('hep:db:course')
 /** @type {import('dexie').Dexie.Table} */
@@ -18,13 +19,14 @@ export const syncCourse = async (courseId) => {
   const last = course ? course.lastFetch || 0 : 0
   log(`Sync course ${courseId} last ${last}`)
   const now = +new Date()
+  if (now - last < minObjectSyncInterval) return
   const res = await axios.post('/course/sync', { courseId, last })
   await courses.put(Object.assign({ lastFetch: now }, res.data))
 }
 
 export const syncAllCourse = async () => {
   if (!await isLoggedIn()) throw new Error('需要登录')
-  const mappers = await ucmap.where('user').equals(await get('current-user')).toArray()
+  const mappers = await ucmap.where({ user: await get('current-user') }).toArray()
   for (const mapper of mappers) {
     const course = await courses.get(mapper.course)
     if (!course) {
@@ -49,4 +51,9 @@ export const getCourse = async (courseId) => {
   // course = await courses.get(courseId)
   // if (course) return course
   throw new Error('无此课程')
+}
+
+export const getUsersFromCourse = async (course) => {
+  const maps = await ucmap.where({ course }).toArray()
+  return Promise.all(maps.map(x => users.get(x.user)))
 }

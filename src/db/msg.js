@@ -5,6 +5,7 @@ import { getCourse } from './course'
 import { db } from './dexie'
 import { get, set } from './config'
 import { bus } from '@/plugins/bus'
+import { minArraySyncInterval } from './limits'
 
 const log = debug('hep:db:msg')
 /** @type {import('dexie').Dexie.Table} */
@@ -15,6 +16,7 @@ export const syncMsg = async (courseId) => {
   const obj = await getCourse(courseId)
   const last = await get('msg-sync-' + courseId) || 0
   const now = +new Date()
+  if (now - last < minArraySyncInterval) return
   const res = await axios.post('/course/msg/sync', { courseId, last })
   log(`@${courseId} fetched ${res.data.length} msgs`)
   await msgs.bulkPut(res.data)
