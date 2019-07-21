@@ -35,8 +35,8 @@
 import { getCourse } from '@/db/course'
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
-import { getPriv } from '../../db/ucmap'
-import { get } from '../../db/config'
+import { getPriv } from '@/db/ucmap'
+import { get } from '@/db/config'
 
 export default {
   name: 'course',

@@ -23,7 +23,7 @@ import { bus } from '@/plugins/bus'
 import { syncAccessToken } from '@/plugins/axios'
 import { get } from '@/db/config'
 import { syncUserUcmap } from '@/db/ucmap'
-import { syncAllCourse } from '../db/course'
+import { syncAllCourse } from '@/db/course'
 
 export default {
   name: 'login',

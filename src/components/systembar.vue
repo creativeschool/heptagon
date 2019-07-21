@@ -1,7 +1,7 @@
 <template>
   <v-system-bar app window style="-webkit-app-region: drag">
     <v-avatar size="32" class="mr-2">
-      <img src="../../public/logo.png"/>
+      <img src="@/../public/logo.png"/>
     </v-avatar>
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
