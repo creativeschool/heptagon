@@ -2,7 +2,11 @@
   <v-layout align-content-start justify-space-between wrap>
     <v-flex xs12 lg4 class="pa-2">
       <v-card>
-        <v-card-title>课程信息</v-card-title>
+        <v-card-title>
+          课程信息
+          <v-spacer/>
+          <v-btn text :to="'/course/' + _id + '/member'">人员信息</v-btn>
+        </v-card-title>
         <v-card-text>
           <v-simple-table>
             <tbody>
