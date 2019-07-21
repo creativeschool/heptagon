@@ -41,6 +41,7 @@ import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { isLoggedIn, syncUser } from '@/db/user'
 import { get } from './db/config'
 import { syncUserUcmap } from './db/ucmap'
+import { syncAllCourse } from './db/course'
 
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
 
@@ -74,6 +75,7 @@ export default {
       if (await isLoggedIn()) {
         await syncUser(await get('current-user'))
         await syncUserUcmap()
+        await syncAllCourse()
       }
     } catch (e) {
       showErrorBox('初始化错误', e.message)

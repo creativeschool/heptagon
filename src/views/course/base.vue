@@ -24,15 +24,15 @@
               </tr>
               <tr>
                 <td>文件操作限制前缀</td>
-                <td>{{ course.priv.scope }}</td>
+                <td>{{ priv.scope }}</td>
               </tr>
               <tr>
                 <td>文件下载限制前缀</td>
-                <td>{{ course.priv.allowver ? course.priv.allowver : '无限制' }}</td>
+                <td>{{ priv.allowver ? priv.allowver : '无限制' }}</td>
               </tr>
               <tr>
                 <td>通知操作</td>
-                <td>{{ course.priv.msg ? '允许' : '禁止' }}</td>
+                <td>{{ priv.msg ? '允许' : '禁止' }}</td>
               </tr>
               <tr>
                 <td>编号</td>
@@ -84,17 +84,21 @@ import { getCourse } from '@/db/course'
 import { syncFile, files } from '@/db/file'
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
+import { getPriv } from '../../db/ucmap'
+import { get } from '../../db/config'
 
 export default {
   name: 'course',
   props: ['_id'],
   data: () => ({
-    course: { priv: {} },
+    course: {},
+    priv: {},
     recentFiles: []
   }),
   methods: {
     async load () {
       this.course = await getCourse(this._id)
+      this.priv = await getPriv(await get('current-user'), this._id)
       await this.syncFile()
       await this.loadFile()
       bus.$emit('title', this.course.name)

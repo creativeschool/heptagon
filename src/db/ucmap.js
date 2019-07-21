@@ -32,3 +32,9 @@ export const syncCourseUcmap = async (courseId) => {
   await ucmap.bulkPut(res.data)
   await set('ucmap-sync-' + courseId, now)
 }
+
+export const getPriv = async (user, course) => {
+  log(`GetPriv user=${user} course=${course}`)
+  const mapper = await ucmap.where({ user, course }).first()
+  return mapper.priv
+}
