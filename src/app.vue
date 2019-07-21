@@ -74,9 +74,11 @@ export default {
         await syncUser()
         await syncCourse()
       }
-      this.loading = false
     } catch (e) {
       showErrorBox('初始化错误', e.message)
+      this.$router.replace('/settings')
+    } finally {
+      this.loading = false
     }
   },
   mounted () {
