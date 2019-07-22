@@ -4,15 +4,13 @@
       <v-card>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" :disabled="!id" :loading="loading" @click="sync">同步</v-btn>
+          <v-btn color="primary" :disabled="!id" :loading="loading" @click="sync">同步通知</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
     <v-flex xs12 class="pa-2" v-for="(msg, i) in msgs" :key="i">
       <v-card hover @click.stop="currentId = msg._id, dialog = true">
-        <v-card-text>
-          {{ msg.content }}
-        </v-card-text>
+        <v-card-text v-html="renderMarkdown(msg.content)" class="content"/>
         <v-card-actions>
           <v-chip label v-for="(tag, i) in msg.tags" :key="i">
             {{ tag }}
@@ -30,7 +28,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-    <v-dialog v-model="dialog" max-width="400px">
+    <v-dialog v-model="dialog">
       <msg-detail v-if="dialog" :id="currentId" @update="load"/>
     </v-dialog>
   </v-layout>
@@ -40,6 +38,7 @@
 import { syncMsg, msgs } from '@/db/msg'
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
+import { renderMarkdown } from '@/plugins/marked'
 import userChip from '@/components/userchip.vue'
 import msgDetail from '@/components/msgdetail.vue'
 
@@ -67,7 +66,7 @@ export default {
   methods: {
     async load () {
       console.log('??!?!?!')
-      this.msgs = await msgs.toArray()
+      this.msgs = await msgs.reverse().toArray()
       bus.$emit('title', '消息列表 - ' + this.$parent.course.name)
     },
     sync () {
@@ -76,7 +75,15 @@ export default {
         .then(this.load)
         .finally(() => { this.loading = false })
     },
-    formatDate
+    formatDate,
+    renderMarkdown
   }
 }
 </script>
+
+<style scoped>
+.content {
+  max-height: 200px;
+  overflow: auto;
+}
+</style>

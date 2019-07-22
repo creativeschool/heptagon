@@ -3,7 +3,11 @@
     <v-flex xs12>
       <v-card>
         <v-card-text>
-          <v-textarea :disabled="loading" v-model="content" label="内容"/>
+          <v-textarea :disabled="loading" v-model="content">
+            <template v-slot:label>
+              内容<v-icon>mdi-markdown</v-icon>
+            </template>
+          </v-textarea>
           <v-combobox :disabled="loading" v-model="tags" label="标签" hide-selected multiple chips/>
         </v-card-text>
         <v-card-actions>

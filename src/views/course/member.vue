@@ -19,8 +19,8 @@
       <v-card>
         <v-card-actions>
           <v-spacer/>
-          <v-btn @click="port" color="success">导出</v-btn>
-          <v-btn @click="sync" color="primary">同步</v-btn>
+          <v-btn @click="port" color="success">导出名单</v-btn>
+          <v-btn @click="sync" color="primary">同步成员</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
