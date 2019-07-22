@@ -6,15 +6,15 @@
             <tbody>
               <tr>
                 <td>课程名</td>
-                <td>{{ course.name }}</td>
+                <td>{{ $parent.course.name }}</td>
               </tr>
               <tr>
                 <td>创建时间</td>
-                <td>{{ formatDate(course.created) }}</td>
+                <td>{{ formatDate($parent.course.created) }}</td>
               </tr>
               <tr>
                 <td>更新时间</td>
-                <td>{{ formatDate(course.updated) }}</td>
+                <td>{{ formatDate($parent.course.updated) }}</td>
               </tr>
               <tr>
                 <td>文件操作限制前缀</td>
@@ -30,7 +30,7 @@
               </tr>
               <tr>
                 <td>编号</td>
-                <td>{{ course.id }}</td>
+                <td>{{ $parent.course.id }}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { getCourse } from '@/db/course'
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
 import { getPriv } from '@/db/ucmap'
@@ -50,14 +49,12 @@ export default {
   name: 'index',
   props: ['id'],
   data: () => ({
-    course: {},
     priv: {}
   }),
   methods: {
     async load () {
-      this.course = await getCourse(this.id)
       this.priv = await getPriv(await get('current-user'), this.id)
-      bus.$emit('title', '基本信息 - ' + this.course.name)
+      bus.$emit('title', '基本信息 - ' + this.$parent.course.name)
     },
     formatDate
   },

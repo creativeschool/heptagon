@@ -36,6 +36,7 @@
 <script>
 import { syncMsg, msgs } from '@/db/msg'
 import { formatDate } from '@/plugins/formatter'
+import { bus } from '@/plugins/bus'
 import userChip from '@/components/userchip.vue'
 
 export default {
@@ -59,6 +60,7 @@ export default {
   methods: {
     async load () {
       this.msgs = await msgs.toArray()
+      bus.$emit('title', '消息列表 - ' + this.$parent.course.name)
     },
     sync () {
       this.loading = true

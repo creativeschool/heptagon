@@ -29,7 +29,7 @@
 
 <script>
 import { syncCourseUcmap } from '@/db/ucmap'
-import { getUsersFromCourse, getCourse, syncAllUserFromCourse } from '@/db/course'
+import { getUsersFromCourse, syncAllUserFromCourse } from '@/db/course'
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
 
@@ -38,7 +38,6 @@ export default {
   props: ['id'],
   data: () => ({
     users: [],
-    course: {},
     loading: false,
     headers: [
       { text: '名称', value: 'name' },
@@ -51,9 +50,8 @@ export default {
   }),
   methods: {
     async load () {
-      this.course = await getCourse(this.id)
       this.users = await getUsersFromCourse(this.id)
-      bus.$emit('title', '成员列表 - ' + this.course.name)
+      bus.$emit('title', '成员列表 - ' + this.$parent.course.name)
     },
     async sync () {
       this.loading = true

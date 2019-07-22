@@ -7,7 +7,7 @@
 import { msgs } from '@/db/msg'
 
 export default {
-  name: 'msgEdit',
+  name: 'msgDetail',
   props: ['value', 'id'],
   model: {
     prop: 'value',

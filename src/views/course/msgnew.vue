@@ -18,6 +18,7 @@
 
 <script>
 import { createMsg } from '@/db/msg'
+import { bus } from '@/plugins/bus'
 
 export default {
   name: 'msgNew',
@@ -28,6 +29,10 @@ export default {
     loading: false
   }),
   methods: {
+    load () {
+      this.clear()
+      bus.$emit('title', '新建通知 - ' + this.$parent.course.name)
+    },
     clear () {
       this.content = ''
       this.tags = []
@@ -40,8 +45,9 @@ export default {
   },
   watch: {
     id: {
+      immediate: true,
       handler () {
-        this.clear()
+        this.load()
       }
     }
   }
