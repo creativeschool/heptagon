@@ -13,7 +13,7 @@
             </thead>
             <tbody>
               <tr v-for="(course, i) in courses" :key="i">
-                <th><router-link :to="'/course/' + course._id">{{ course.name }}</router-link></th>
+                <th><router-link :to="'/course/' + course.id">{{ course.name }}</router-link></th>
                 <th>
                   <v-chip v-for="(tag, i) in course.tags" :key="i">{{ tag }}</v-chip>
                 </th>

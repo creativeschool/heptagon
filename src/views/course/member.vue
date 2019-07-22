@@ -35,7 +35,7 @@ import { bus } from '@/plugins/bus'
 
 export default {
   name: 'member',
-  props: ['_id'],
+  props: ['id'],
   data: () => ({
     users: [],
     course: {},
@@ -51,14 +51,14 @@ export default {
   }),
   methods: {
     async load () {
-      this.course = await getCourse(this._id)
-      this.users = await getUsersFromCourse(this._id)
+      this.course = await getCourse(this.id)
+      this.users = await getUsersFromCourse(this.id)
       bus.$emit('title', '成员列表 - ' + this.course.name)
     },
     async sync () {
       this.loading = true
-      await syncCourseUcmap(this._id)
-      await syncAllUserFromCourse(this._id)
+      await syncCourseUcmap(this.id)
+      await syncAllUserFromCourse(this.id)
       await this.load()
       this.loading = false
     },
@@ -68,7 +68,7 @@ export default {
     formatDate
   },
   watch: {
-    _id: {
+    id: {
       immediate: true,
       handler () {
         this.load()

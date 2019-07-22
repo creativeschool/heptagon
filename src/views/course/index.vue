@@ -30,7 +30,7 @@
               </tr>
               <tr>
                 <td>编号</td>
-                <td>{{ course._id }}</td>
+                <td>{{ course.id }}</td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -48,15 +48,15 @@ import { get } from '@/db/config'
 
 export default {
   name: 'index',
-  props: ['_id'],
+  props: ['id'],
   data: () => ({
     course: {},
     priv: {}
   }),
   methods: {
     async load () {
-      this.course = await getCourse(this._id)
-      this.priv = await getPriv(await get('current-user'), this._id)
+      this.course = await getCourse(this.id)
+      this.priv = await getPriv(await get('current-user'), this.id)
       bus.$emit('title', '基本信息 - ' + this.course.name)
     },
     formatDate
@@ -68,7 +68,7 @@ export default {
     bus.$off('course-sync', this.load)
   },
   watch: {
-    _id: {
+    id: {
       immediate: true,
       handler () {
         this.load()

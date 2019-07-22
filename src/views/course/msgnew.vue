@@ -9,7 +9,7 @@
         <v-card-actions>
           <v-spacer/>
           <v-btn color="error" outlined @click="clear" :disabled="loading">清空</v-btn>
-          <v-btn color="primary" @click="submit" :loading="loading" :disabled="!_id">提交</v-btn>
+          <v-btn color="primary" @click="submit" :loading="loading" :disabled="!id">提交</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -17,10 +17,11 @@
 </template>
 
 <script>
-import { createMsg } from '../../db/msg'
+import { createMsg } from '@/db/msg'
+
 export default {
   name: 'msgNew',
-  props: ['_id'],
+  props: ['id'],
   data: () => ({
     content: '',
     tags: [],
@@ -33,12 +34,12 @@ export default {
     },
     submit () {
       this.loading = true
-      createMsg(this._id, this.content, this.tags)
+      createMsg(this.id, this.content, this.tags)
         .finally(() => { this.loading = false })
     }
   },
   watch: {
-    _id: {
+    id: {
       handler () {
         this.clear()
       }

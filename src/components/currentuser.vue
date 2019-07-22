@@ -38,12 +38,12 @@ export default {
   },
   methods: {
     async load () {
-      const _id = await get('current-user')
-      if (!_id) {
+      const id = await get('current-user')
+      if (!id) {
         this.user = null
         return
       }
-      this.user = await getUser(_id)
+      this.user = await getUser(id)
     }
   }
 }

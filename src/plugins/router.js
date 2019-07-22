@@ -31,7 +31,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "require-login" */'@/views/profile.vue')
     },
     {
-      path: '/course/:_id',
+      path: '/course/:id',
       props: true,
       component: () => import(/* webpackChunkName: "require-login" */'@/views/course/base.vue'),
       children: [
