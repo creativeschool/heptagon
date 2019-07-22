@@ -52,6 +52,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "require-login" */'@/views/course/msg.vue')
         },
         {
+          path: 'msg/new',
+          props: true,
+          component: () => import(/* webpackChunkName: "require-login" */'@/views/course/msgnew.vue')
+        },
+        {
           path: 'member',
           props: true,
           component: () => import(/* webpackChunkName: "require-login" */'@/views/course/member.vue')

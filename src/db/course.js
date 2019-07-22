@@ -1,7 +1,7 @@
 import { axios } from '@/plugins/axios'
 import debug from 'debug'
 import { db } from './dexie'
-import { isLoggedIn, users } from './user'
+import { isLoggedIn, users, syncUser } from './user'
 import { ucmap } from './ucmap'
 import { get } from './config'
 import { minObjectSyncInterval } from './limits'
@@ -29,7 +29,7 @@ export const syncAllCourse = async () => {
   const mappers = await ucmap.where({ user: await get('current-user') }).toArray()
   for (const mapper of mappers) {
     const course = await courses.get(mapper.course)
-    if (!course) {
+    if (!course || !course.lastFetch) {
       await syncCourse(mapper.course)
     } else {
       const updated = Math.max(course.updated, mapper.updated)
@@ -56,4 +56,20 @@ export const getCourse = async (courseId) => {
 export const getUsersFromCourse = async (course) => {
   const maps = await ucmap.where({ course }).toArray()
   return Promise.all(maps.map(x => users.get(x.user)))
+}
+
+export const syncAllUserFromCourse = async (course) => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const mappers = await ucmap.where({ course }).toArray()
+  for (const mapper of mappers) {
+    const user = await users.get(mapper.user)
+    if (!user || !user.lastFetch) {
+      await syncUser(mapper.user)
+    } else {
+      const updated = Math.max(course.updated, mapper.updated)
+      const now = +new Date()
+      const delta = Math.max(Math.ceil((now - updated) / 10), 5000)
+      if (user.lastFetch + delta <= now) await syncUser(mapper.user)
+    }
+  }
 }

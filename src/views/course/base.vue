@@ -4,10 +4,6 @@
       <v-card>
         <v-card-title>
           {{ course.name }}
-          <v-spacer/>
-          <v-btn icon @click="sync" :disabled="!this._id" :loading="loading">
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
         </v-card-title>
         <v-card-text>
           <v-list>
@@ -17,14 +13,26 @@
             <v-list-item :to="`/course/${_id}/member`" exact>
               <v-list-item-title>成员列表</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="`/course/${_id}/msg`" exact>
-              <v-list-item-title>消息通知</v-list-item-title>
-            </v-list-item>
+            <v-list-group>
+              <template v-slot:activator>
+                <v-list-item-title>消息通知</v-list-item-title>
+              </template>
+              <v-list-item :to="`/course/${_id}/msg`" exact>
+                <v-list-item-title>消息列表</v-list-item-title>
+              </v-list-item>
+              <v-list-item :to="`/course/${_id}/msg/new`" exact>
+                <v-list-item-title>新建通知</v-list-item-title>
+              </v-list-item>
+            </v-list-group>
             <v-list-item :to="`/course/${_id}/file`" exact>
               <v-list-item-title>文件管理</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="primary" @click="sync" :disabled="!this._id" :loading="loading">同步</v-btn>
+        </v-card-actions>
       </v-card>
     </v-flex>
     <v-flex xs12 lg10 class="pa-2">

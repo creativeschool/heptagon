@@ -19,7 +19,7 @@
       <v-card>
         <v-card-actions>
           <v-spacer/>
-          <v-btn @click="sync" color="success">导出</v-btn>
+          <v-btn @click="port" color="success">导出</v-btn>
           <v-btn @click="sync" color="primary">同步</v-btn>
         </v-card-actions>
       </v-card>
@@ -29,7 +29,7 @@
 
 <script>
 import { syncCourseUcmap } from '@/db/ucmap'
-import { getUsersFromCourse, getCourse } from '@/db/course'
+import { getUsersFromCourse, getCourse, syncAllUserFromCourse } from '@/db/course'
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
 
@@ -58,8 +58,12 @@ export default {
     async sync () {
       this.loading = true
       await syncCourseUcmap(this._id)
+      await syncAllUserFromCourse(this._id)
       await this.load()
       this.loading = false
+    },
+    port () {
+      //
     },
     formatDate
   },
