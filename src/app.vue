@@ -16,7 +16,7 @@
     </v-content>
 
     <v-footer app padless>
-      <v-flex text-xs-center xs12>
+      <v-flex text-center xs12>
         版本 {{ build.version }}.{{ build.hash }}-{{ build.branch }}({{ isElectron ? 'electron' : 'web' }})
       </v-flex>
     </v-footer>
