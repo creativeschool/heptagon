@@ -25,17 +25,24 @@ export default {
   },
   methods: {
     async load () {
+      if (!this.id) {
+        this.user.name = '加载中'
+        this.color = 'grey'
+        return
+      }
       const user = await users.get(this.id)
       if (!user) {
         try {
           await syncUser(this.id)
           this.user = await users.get(this.id)
+          this.color = 'primary'
         } catch (e) {
           this.user.name = '无此用户'
           this.color = 'grey'
         }
       } else {
         this.user = user
+        this.color = 'primary'
       }
     }
   }

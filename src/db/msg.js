@@ -62,7 +62,7 @@ export const editMsg = async (msgId, content, tags) => {
   if (!await isLoggedIn()) throw new Error('需要登录')
   const msg = await msgs.get(msgId)
   if (!msg) throw new Error('无此消息')
-  const delta = { courseId: msg.course }
+  const delta = { courseId: msg.course, msgId }
   if (content !== msg.content) delta.content = content
   if (!compareArraySimple(msg.tags, tags)) delta.tags = tags
   await axios.post('/course/msg/edit', delta)
