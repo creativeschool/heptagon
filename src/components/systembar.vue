@@ -85,7 +85,7 @@ export default {
       return `${this.title}${this.title ? ' - ' : ''}${APP_NAME}`
     }
   },
-  mounted () {
+  created () {
     bus.$on('title', title => {
       this.title = title
       document.title = this.systemTitle

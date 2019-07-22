@@ -71,7 +71,7 @@ export default {
       this.loading = false
     }
   },
-  mounted () {
+  created () {
     bus.$on('course-sync', this.load)
   },
   beforeDestroy () {

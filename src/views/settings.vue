@@ -25,7 +25,7 @@ export default {
   data: () => ({
     baseurl: null
   }),
-  mounted () {
+  created () {
     this.load()
     bus.$emit('title', '设置')
   },

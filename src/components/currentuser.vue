@@ -32,7 +32,7 @@ export default {
   data: () => ({
     user: null
   }),
-  mounted () {
+  created () {
     this.load()
     bus.$on('chrome_update', () => this.load())
   },

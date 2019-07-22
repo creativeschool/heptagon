@@ -6,7 +6,8 @@
 </template>
 
 <script>
-import { users, syncUser } from '../db/user'
+import { users, syncUser } from '@/db/user'
+
 export default {
   name: 'userChip',
   data: () => ({

@@ -115,7 +115,7 @@ export default {
       { text: '内容', value: 'msg', sortable: false }
     ]
   }),
-  mounted () {
+  created () {
     bus.$emit('title', '同步信息')
   },
   methods: {

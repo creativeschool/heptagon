@@ -60,7 +60,7 @@ export default {
     versions: [],
     version
   }),
-  mounted () {
+  created () {
     for (const key in versions) {
       this.versions.push([key, versions[key]])
     }

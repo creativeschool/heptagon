@@ -39,7 +39,7 @@ export default {
   data: () => ({
     courses: []
   }),
-  mounted () {
+  created () {
     this.loadLogin()
     this.loadCourse()
     bus.$emit('title', '')

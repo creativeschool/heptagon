@@ -61,7 +61,7 @@ export default {
     },
     formatDate
   },
-  mounted () {
+  created () {
     bus.$on('course-sync', this.load)
   },
   beforeDestroy () {

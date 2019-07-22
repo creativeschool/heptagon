@@ -7,9 +7,14 @@ import { get, set } from './config'
 import { bus } from '@/plugins/bus'
 import { minArraySyncInterval } from './limits'
 import { getPriv } from './ucmap'
+import { compareArraySimple } from '@/plugins/utils'
+
+/**
+ * @typedef {{_id:string, course:string, user:string, content:string, tags: string[], created: number, updated: number}} Msg
+ */
 
 const log = debug('hep:db:msg')
-/** @type {import('dexie').Dexie.Table} */
+/** @type {import('dexie').Dexie.Table<Msg>} */
 export const msgs = db.msgs
 
 /**
@@ -46,4 +51,22 @@ export const createMsg = async (courseId, content, tags) => {
   log(`@${obj.name} created ${res.data}`)
   await syncMsg(courseId, true, true)
   bus.$emit('toast', `课程${obj.name}通知发布成功`)
+}
+
+/**
+ * @param {string} msgId
+ * @param {string} content
+ * @param {string[]} tags
+ */
+export const editMsg = async (msgId, content, tags) => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const msg = await msgs.get(msgId)
+  if (!msg) throw new Error('无此消息')
+  const delta = { courseId: msg.course }
+  if (content !== msg.content) delta.content = content
+  if (!compareArraySimple(msg.tags, tags)) delta.tags = tags
+  await axios.post('/course/msg/edit', delta)
+  log(`@${msgId} Edit 🆗`)
+  msgs.update(msgId, { content, tags })
+  bus.$emit('toast', `通知更新成功`)
 }

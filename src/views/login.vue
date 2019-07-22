@@ -54,7 +54,7 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     isLoggedIn().then(x => {
       this.loggedIn = x
     })

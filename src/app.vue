@@ -69,6 +69,7 @@ export default {
     }
   },
   async created () {
+    bus.$on('toast', msg => this.showToast(msg))
     try {
       await syncBaseUrl()
       await syncAccessToken()
@@ -83,9 +84,6 @@ export default {
     } finally {
       this.loading = false
     }
-  },
-  mounted () {
-    bus.$on('toast', msg => this.showToast(msg))
   },
   errorCaptured (err, vm, info) {
     console.log(info)
