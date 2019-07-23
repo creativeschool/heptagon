@@ -65,8 +65,7 @@ export default {
   },
   methods: {
     async load () {
-      console.log('??!?!?!')
-      this.msgs = await msgs.reverse().toArray()
+      this.msgs = await msgs.where('course').equals(this.id).reverse().toArray()
       bus.$emit('title', '消息列表 - ' + this.$parent.course.name)
     },
     sync () {

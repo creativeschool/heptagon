@@ -43,9 +43,11 @@
     {{ systemTitle }}
     <v-spacer/>
     <current-user/>
-    <v-icon v-if="isElectron" @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
-    <v-icon v-if="isElectron" @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
-    <v-icon v-if="isElectron" @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
+    <template v-if="isElectron">
+      <v-icon @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
+      <v-icon @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
+      <v-icon @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
+    </template>
   </v-system-bar>
 </template>
 

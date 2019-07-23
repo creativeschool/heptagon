@@ -86,7 +86,6 @@ export default {
     }
   },
   errorCaptured (err, vm, info) {
-    console.log(info)
     this.showToast(err.message)
   }
 }
