@@ -30,7 +30,7 @@
               </tr>
               <tr>
                 <td>编号</td>
-                <td>{{ $parent.course.id }}</td>
+                <td>{{ $parent.course._id }}</td>
               </tr>
             </tbody>
           </v-simple-table>
