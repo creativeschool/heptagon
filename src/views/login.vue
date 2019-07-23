@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title>登录</v-card-title>
         <v-card-text>
-          <v-alert v-if="loggedIn" type="warning">您已经登录。反复登录将被记录，且会丢失本地设置。</v-alert>
+          <v-alert :value="loggedIn" type="warning" prominent >您已经登录。反复登录将被记录，且会丢失本地设置。</v-alert>
           <v-text-field v-model="login" :error="error" label="登录名" :disabled="loading" />
           <v-text-field v-model="pass" :error="error" type="password" label="密码" :disabled="loading" />
         </v-card-text>

@@ -8,7 +8,7 @@
               内容<v-icon>mdi-markdown</v-icon>
             </template>
           </v-textarea>
-          <v-combobox :disabled="loading" v-model="tags" label="标签" hide-selected multiple chips/>
+          <v-combobox :disabled="loading" v-model="tags" label="标签" multiple chips/>
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
