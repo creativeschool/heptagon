@@ -36,7 +36,7 @@
 import { bus } from '@/plugins/bus'
 import systemBar from '@/components/systembar'
 import { version } from '@/../package.json'
-import { showErrorBox, isElectron } from '@/plugins/electron'
+import core from '@/plugins/core'
 import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { isLoggedIn, syncUser } from '@/db/user'
 import { get } from './db/config'
@@ -54,7 +54,7 @@ export default {
     toast: '',
     snackbar: false,
     loading: true,
-    isElectron,
+    isElectron: process.env.IS_ELECTRON,
     appName: APP_NAME,
     build: {
       version,
@@ -79,7 +79,7 @@ export default {
         await syncAllCourse()
       }
     } catch (e) {
-      showErrorBox('初始化错误', e.message)
+      core.showErrorBox('初始化错误', e.message)
       this.$router.replace('/settings')
     } finally {
       this.loading = false

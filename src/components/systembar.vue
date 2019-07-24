@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { minimize, maximize, close, devTools, openUrl, isElectron } from '@/plugins/electron'
+import core from '@/plugins/core'
 import { bus } from '@/plugins/bus'
 import currentUser from '@/components/currentuser.vue'
 
@@ -65,22 +65,14 @@ export default {
   },
   data: () => ({
     title: '',
-    isElectron
+    isElectron: process.env.IS_ELECTRON
   }),
   methods: {
-    minimize () {
-      minimize()
-    },
-    maximize () {
-      maximize()
-    },
-    close () {
-      close()
-    },
-    devTools () {
-      devTools()
-    },
-    openUrl
+    minimize: core.minimize,
+    maximize: core.maximize,
+    close: core.close,
+    devTools: core.devTools,
+    openUrl: core.openUrl
   },
   computed: {
     systemTitle () {

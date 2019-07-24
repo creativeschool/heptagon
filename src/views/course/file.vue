@@ -64,7 +64,6 @@
 
 <script>
 import { files, syncFile } from '@/db/file'
-import { isElectron } from '@/plugins/electron'
 
 export default {
   name: 'file',
@@ -73,7 +72,7 @@ export default {
     files: [],
     loading: false,
     path: '/',
-    isElectron
+    isElectron: process.env.IS_ELECTRON
   }),
   methods: {
     async load () {
@@ -89,7 +88,7 @@ export default {
       this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload/file`, query: { path: this.path } })
     },
     uploadFolder () {
-      this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload/folder`, query: { path: this.path } })
+      this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload/folder`, query: { path: this.path, folder: true } })
     }
   },
   watch: {

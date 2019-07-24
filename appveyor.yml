@@ -29,7 +29,7 @@ install:
   - yarn
 
 build_script:
-  - yarn generate-icons
-  - yarn build
+  - yarn electron:generate-icons
+  - yarn electron:build
 
 test: off

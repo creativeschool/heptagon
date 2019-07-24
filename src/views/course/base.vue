@@ -34,9 +34,6 @@
               <v-list-item :to="`/course/${id}/file/upload/file`" exact>
                 <v-list-item-title>文件上传</v-list-item-title>
               </v-list-item>
-              <v-list-item :to="`/course/${id}/file/upload/folder`" exact v-if="isElectron">
-                <v-list-item-title>文件夹上传</v-list-item-title>
-              </v-list-item>
             </v-list-group>
           </v-list>
         </v-card-text>
@@ -57,15 +54,13 @@
 <script>
 import { getCourse, syncCourse } from '@/db/course'
 import { bus } from '@/plugins/bus'
-import { isElectron } from '@/plugins/electron'
 
 export default {
   name: 'course',
   props: ['id'],
   data: () => ({
     course: {},
-    loading: false,
-    isElectron
+    loading: false
   }),
   methods: {
     async load () {

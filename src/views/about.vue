@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { versions, openUrl } from '@/plugins/electron'
+import core from '@/plugins/core'
 import { version } from '@/../package.json'
 import { bus } from '@/plugins/bus'
 
@@ -61,13 +61,13 @@ export default {
     version
   }),
   created () {
-    for (const key in versions) {
-      this.versions.push([key, versions[key]])
+    for (const key in core.versions) {
+      this.versions.push([key, core.versions[key]])
     }
     bus.$emit('title', '关于')
   },
   methods: {
-    openUrl
+    openUrl: core.openUrl
   }
 }
 </script>
