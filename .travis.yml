@@ -1,35 +1,29 @@
-skip_commits:
-  message: /(\[skip ci\]|\[skip appveyor\])/
-
 branches:
   only:
     - master
 
-environment:
-  GH_TOKEN:
-    secure: /BGde185RyklcrqzXMN4FCnFW9oOCYxbM0oHHWq/2C6vXKKCmJuj00eyo6etkcLt
+os:
+  - linux
 
-image: Visual Studio 2017
+dist: bionic
 
-platform:
-  - x64
+language: node_js
 
-cache:
-  - node_modules
-  - '%USERPROFILE%\.electron'
-  - '%LOCALAPPDATA%\Yarn'
+node_js:
+  - "12"
 
-init:
-  - git config --global core.autocrlf input
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install --no-install-recommends -y libopenjp2-tools
+  - sudo apt-get install --no-install-recommends -y rpm
+  - sudo apt-get install --no-install-recommends -y bsdtar
 
 install:
-  - ps: Install-Product node 12 x64
-  - npm i -g npm
-  - npm i -g yarn
   - yarn
 
-build_script:
+script:
   - yarn generate-icons
   - yarn build
 
-test: off
+cache:
+  yarn: true
