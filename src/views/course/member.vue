@@ -20,7 +20,7 @@
         <v-card-actions>
           <v-spacer/>
           <v-btn @click="port" color="success">导出名单</v-btn>
-          <v-btn @click="sync" color="primary">同步成员</v-btn>
+          <v-btn @click="load" color="primary">同步成员</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -50,15 +50,12 @@ export default {
   }),
   methods: {
     async load () {
-      this.users = await getUsersFromCourse(this.id)
-      bus.$emit('title', '成员列表 - ' + this.$parent.course.name)
-    },
-    async sync () {
       this.loading = true
       await syncCourseUcmap(this.id)
       await syncAllUserFromCourse(this.id)
-      await this.load()
+      this.users = await getUsersFromCourse(this.id)
       this.loading = false
+      bus.$emit('title', '成员列表 - ' + this.$parent.course.name)
     },
     port () {
       //

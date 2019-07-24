@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-start justify-space-between wrap>
-    <v-flex xs12 lg2 class="pa-2">
+    <v-flex lg2 md3 sm4 xs12 class="pa-2">
       <v-card>
         <v-card-title>
           {{ course.name }}
@@ -44,7 +44,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-    <v-flex xs12 lg10>
+    <v-flex lg10 md9 sm8 xs12>
       <v-container fluid>
         <router-view/>
       </v-container>

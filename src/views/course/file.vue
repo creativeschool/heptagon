@@ -5,33 +5,53 @@
         <v-card>
           <v-card-actions>
             <v-spacer/>
-            <v-btn @click="sync" color="primary">同步文件</v-btn>
+            <v-btn @click="load" color="primary">同步文件</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
       <v-flex xs3 class="pa-2">
         <v-card>
-          <v-card-title>文件树</v-card-title>
+          <v-card-text>
+            <v-treeview :items="tree" v-model="selection" selectable return-object/>
+          </v-card-text>
         </v-card>
       </v-flex>
       <v-flex xs9 class="pa-2">
-        <v-card>
-          <v-text-field readonly label="当前路径" v-model="path" hide-details class="ma-2"/>
-          <v-divider/>
-          <v-card-text>
-            <!-- TODO -->
-          </v-card-text>
-          <v-divider/>
-          <v-card-actions>
-            <v-spacer/>
-            <v-btn icon @click="uploadFile">
-              <v-icon>mdi-file-upload</v-icon>
-            </v-btn>
-            <v-btn icon @click="uploadFolder" v-if="isElectron">
-              <v-icon>mdi-folder-upload</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <template v-if="selection.length">
+            <v-card>
+              <v-card-text>
+                <v-list two-line>
+                  <v-list-item v-for="(item, i) in selection" :key="i">
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.name }}</v-list-item-title>
+                      <v-list-item-subtitle>{{ item.file.path }}</v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-text>
+              <v-card-actions>
+              </v-card-actions>
+            </v-card>
+        </template>
+        <template v-else>
+          <v-card>
+            <v-text-field readonly label="当前路径" v-model="path" hide-details class="ma-2"/>
+            <v-divider/>
+            <v-card-text>
+              <!-- TODO -->
+            </v-card-text>
+            <v-divider/>
+            <v-card-actions>
+              <v-spacer/>
+              <v-btn icon @click="uploadFile">
+                <v-icon>mdi-file-upload</v-icon>
+              </v-btn>
+              <v-btn icon @click="uploadFolder" v-if="isElectron">
+                <v-icon>mdi-folder-upload</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </template>
       </v-flex>
     </template>
     <template v-else>
@@ -39,7 +59,7 @@
         <v-card color="transparent" flat>
           <v-card-title>
             <v-spacer/>
-            <v-icon size="5em">mdi-test-tube-empty</v-icon>
+            <v-icon size="5em">mdi-flask-empty-outline</v-icon>
             <v-spacer/>
           </v-card-title>
           <v-card-title>
@@ -64,6 +84,8 @@
 
 <script>
 import { files, syncFile } from '@/db/file'
+import { bus } from '@/plugins/bus'
+import { generateTreeviewData } from '@/plugins/trie'
 
 export default {
   name: 'file',
@@ -72,17 +94,23 @@ export default {
     files: [],
     loading: false,
     path: '/',
-    isElectron: process.env.IS_ELECTRON
+    isElectron: process.env.IS_ELECTRON,
+    tree: [],
+    selection: []
   }),
   methods: {
-    async load () {
-      this.files = await files.where('course').equals(this.id).toArray()
-    },
-    sync () {
+    load () {
       this.loading = true
       syncFile(this.id)
-        .then(this.load)
-        .finally(() => { this.loading = false })
+        .then(() => files.where('course').equals(this.id).toArray())
+        .then(files => {
+          this.files = files
+          this.tree = generateTreeviewData(this.files)
+        })
+        .finally(() => {
+          this.loading = false
+          bus.$emit('title', '文件列表 - ' + this.$parent.course.name)
+        })
     },
     uploadFile () {
       this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload`, query: { path: this.path } })

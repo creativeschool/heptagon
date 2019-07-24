@@ -4,7 +4,7 @@
       <v-card>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="primary" :disabled="!id" :loading="loading" @click="sync">同步通知</v-btn>
+          <v-btn color="primary" :disabled="!id" :loading="loading" @click="load">同步通知</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -64,15 +64,17 @@ export default {
     }
   },
   methods: {
-    async load () {
-      this.msgs = await msgs.where('course').equals(this.id).reverse().toArray()
-      bus.$emit('title', '消息列表 - ' + this.$parent.course.name)
-    },
-    sync () {
+    load () {
       this.loading = true
       syncMsg(this.id)
-        .then(this.load)
-        .finally(() => { this.loading = false })
+        .then(() => msgs.where('course').equals(this.id).reverse().toArray())
+        .then(msgs => {
+          this.msgs = msgs
+        })
+        .finally(() => {
+          this.loading = false
+          bus.$emit('title', '消息列表 - ' + this.$parent.course.name)
+        })
     },
     formatDate,
     renderMarkdown

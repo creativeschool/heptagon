@@ -7,6 +7,7 @@
       <v-toolbar-items>
         <v-btn text to="/">首页</v-btn>
         <v-btn text to="/info">同步信息</v-btn>
+        <v-btn text to="/client" v-if="!isElectron">下载客户端</v-btn>
       </v-toolbar-items>
     </v-app-bar>
     <v-content>
