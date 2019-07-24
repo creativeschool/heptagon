@@ -28,73 +28,91 @@
       <v-flex xs9 class="pa-2">
         <!-- Selected file operations -->
         <template v-if="selection.length">
-            <v-card>
-              <v-card-title>选中的文件({{ selection.length }})</v-card-title>
-              <v-list two-line>
-                <v-list-item v-for="(item, i) in selection" :key="i">
-                  <v-list-item-content>
-                    <v-list-item-title>{{ item.name }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.file.path }}</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-              <v-card-actions>
-              </v-card-actions>
-            </v-card>
-        </template>
-        <!-- File browser -->
-        <template v-else>
           <v-card>
-            <v-text-field readonly label="当前路径" v-model="path" hide-details class="ma-2"/>
-            <v-divider/>
-            <v-list subheader two-line>
-              <template v-if="path !== '/'">
-                <v-subheader inset>父目录</v-subheader>
-                <v-list-item @click="path = path.substr(0, path.substr(0, path.length - 1).lastIndexOf('/') + 1)">
-                  <v-list-item-avatar>
-                    <v-icon>mdi-folder</v-icon>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    ..
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-              <v-subheader inset v-if="displayFolders.length">文件夹</v-subheader>
-              <v-list-item v-for="([name, info], i) in displayFolders" :key="i" @click="path += name + '/'">
-                <v-list-item-avatar>
-                  <v-icon>mdi-folder</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>{{ name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ info.count }}文件</v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-subheader inset v-if="displayFiles.length">文件</v-subheader>
-              <v-list-item v-for="([name, item], i) in displayFiles" :key="i">
+            <v-card-title>选中的文件({{ selection.length }})</v-card-title>
+            <v-list two-line>
+              <v-list-item v-for="(item, i) in selection" :key="i">
                 <v-list-item-avatar>
                   <v-icon>mdi-file</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{ name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ item.versions.length }}版本</v-list-item-subtitle>
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ item.file.path }}</v-list-item-subtitle>
                 </v-list-item-content>
-                <v-list-item-action>
-                  <v-btn icon>
-                    <v-icon>info</v-icon>
-                  </v-btn>
-                </v-list-item-action>
               </v-list-item>
             </v-list>
-            <v-divider/>
             <v-card-actions>
               <v-spacer/>
-              <v-btn icon @click="uploadFile">
-                <v-icon>mdi-file-upload</v-icon>
-              </v-btn>
-              <v-btn icon @click="uploadFolder" v-if="isElectron">
-                <v-icon>mdi-folder-upload</v-icon>
-              </v-btn>
+              <v-btn color="primary">下载</v-btn>
+              <v-btn color="error">删除</v-btn>
             </v-card-actions>
+          </v-card>
+        </template>
+        <!-- File browser -->
+        <template v-else>
+          <v-card>
+            <v-card-text>
+              <v-text-field label="当前路径" v-model="realpath" hide-details class="ma-2" @blur="path = realpath" @keyup.native.enter="path = realpath"/>
+            </v-card-text>
+            <v-divider/>
+            <template v-if="displayFiles.length || displayFolders.length">
+              <v-list subheader two-line>
+                <template v-if="path !== '/'">
+                  <v-subheader inset>父目录</v-subheader>
+                  <v-list-item @click="path = path.substr(0, path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1)">
+                    <v-list-item-avatar>
+                      <v-icon>mdi-folder</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      ..
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+                <v-subheader inset v-if="displayFolders.length">文件夹</v-subheader>
+                <v-list-item v-for="([name, info], i) in displayFolders" :key="i" @click="path += name + '/'">
+                  <v-list-item-avatar>
+                    <v-icon>mdi-folder</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ name }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ info.count }}文件</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-subheader inset v-if="displayFiles.length">文件</v-subheader>
+                <v-list-item v-for="([name, item], i) in displayFiles" :key="i">
+                  <v-list-item-avatar>
+                    <v-icon>mdi-file</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ name }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ item.versions.length }}版本</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon>
+                      <v-icon>info</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+              <v-divider/>
+              <v-card-actions>
+                <v-spacer/>
+                <v-btn icon @click="uploadFile">
+                  <v-icon>mdi-file-upload</v-icon>
+                </v-btn>
+                <v-btn icon @click="uploadFolder" v-if="isElectron">
+                  <v-icon>mdi-folder-upload</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </template>
+            <template v-else>
+              <v-card-text class="text-center">
+                <v-icon size="5em">mdi-flask-empty-outline</v-icon>
+              </v-card-text>
+              <v-card-text class="text-center">
+                无结果
+              </v-card-text>
+            </template>
           </v-card>
         </template>
       </v-flex>
@@ -145,6 +163,7 @@ export default {
     displayFiles: [],
     loading: false,
     path: '/',
+    realpath: '/',
     isElectron: process.env.IS_ELECTRON,
     tree: [],
     selection: [],
@@ -166,6 +185,17 @@ export default {
         })
     },
     filter () {
+      if (this.path.startsWith('/')) {
+        this.filterPath()
+      } else {
+        this.filterSearch()
+      }
+    },
+    filterSearch () {
+      this.displayFolders = []
+      this.displayFiles = []
+    },
+    filterPath () {
       if (this.path.endsWith('/')) {
         const display = this.files.filter(x => x.path.startsWith(this.path))
         const folders = new Map()
@@ -211,11 +241,15 @@ export default {
       handler () {
         if (this.active.length) {
           this.path = this.active[0].path
+          this.filter()
         }
       }
     },
     path: {
       handler () {
+        if (this.path !== this.realpath) {
+          this.realpath = this.path
+        }
         this.filter()
       }
     }
