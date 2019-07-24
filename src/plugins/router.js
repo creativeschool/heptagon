@@ -46,6 +46,13 @@ export default new Router({
           component: () => import(/* webpackChunkName: "require-login" */'@/views/course/file.vue')
         },
         {
+          path: 'file/upload',
+          props: true,
+          component: () => process.env.IS_ELECTRON
+            ? import(/* webpackChunkName: "require-login" */'@/views/course/electronfileupload.vue')
+            : import(/* webpackChunkName: "require-login" */'@/views/course/webfileupload.vue')
+        },
+        {
           path: 'msg',
           props: true,
           component: () => import(/* webpackChunkName: "require-login" */'@/views/course/msg.vue')

@@ -31,7 +31,8 @@
               <v-list-item :to="`/course/${id}/file`" exact>
                 <v-list-item-title>文件管理</v-list-item-title>
               </v-list-item>
-              <v-list-item :to="`/course/${id}/file/upload/file`" exact>
+              <!-- https://github.com/vuejs/vue-router/issues/2040 -->
+              <v-list-item :to="`/course/${id}/file/upload`">
                 <v-list-item-title>文件上传</v-list-item-title>
               </v-list-item>
             </v-list-group>

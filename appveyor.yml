@@ -7,7 +7,7 @@ branches:
 
 environment:
   GH_TOKEN:
-    secure: /BGde185RyklcrqzXMN4FCnFW9oOCYxbM0oHHWq/2C6vXKKCmJuj00eyo6etkcLt
+    secure: HHISy+sGq57hKlEtc0o7esy0gVWqL+0LZjmvVQa38W66OfqEs/LBhJhtI6MIC66y
 
 image: Visual Studio 2017
 

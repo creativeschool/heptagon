@@ -85,10 +85,10 @@ export default {
         .finally(() => { this.loading = false })
     },
     uploadFile () {
-      this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload/file`, query: { path: this.path } })
+      this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload`, query: { path: this.path } })
     },
     uploadFolder () {
-      this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload/folder`, query: { path: this.path, folder: true } })
+      this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload`, query: { path: this.path, folder: true } })
     }
   },
   watch: {
