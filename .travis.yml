@@ -18,7 +18,7 @@ before_install:
   - sudo apt-get install --no-install-recommends -y rpm
   - sudo apt-get install --no-install-recommends -y bsdtar
   - npm i -g npm
-  - npm i -g yarn 
+  - npm i -g yarn
 
 install:
   - yarn
