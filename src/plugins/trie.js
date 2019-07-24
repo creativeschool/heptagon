@@ -3,7 +3,6 @@
  */
 export const generateCompressedTrie = (files) => {
   const m = new Map()
-  m.path = '/'
   for (const file of files) {
     // path is in the form of `/folder/subfolder/.../name`
     // So ignore the first '/'
@@ -14,7 +13,6 @@ export const generateCompressedTrie = (files) => {
       const token = tokens[i]
       if (!n.has(token)) {
         const newNode = new Map()
-        newNode.path = n.path + '/' + token
         n.set(token, newNode)
       }
       n = n.get(token)
@@ -30,7 +28,7 @@ export const generateCompressedTrie = (files) => {
 }
 
 export const generateTreeviewData = (files) => {
-  const root = { id: 0, name: '/', children: [] }
+  const root = { id: 0, name: '/', path: '/', children: [] }
   const queue = [[generateCompressedTrie(files), root]]
   let counter = 0
   while (queue.length) {
@@ -38,13 +36,13 @@ export const generateTreeviewData = (files) => {
     for (const [key, value] of head) {
       if (value instanceof Map) {
         // Subfolder
-        const newRoot = { id: ++counter, name: key + '/', children: [] }
+        const newRoot = { id: ++counter, name: key + '/', path: root.path + key + '/', children: [] }
         root.children.push(newRoot)
         queue.push([value, newRoot])
       } else {
         // Files
         for (const file of value) {
-          root.children.push({ id: ++counter, name: key, file })
+          root.children.push({ id: ++counter, name: key, path: file.path, file })
         }
       }
     }
