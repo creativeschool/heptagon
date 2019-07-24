@@ -2,6 +2,7 @@ const os = require('os')
 const { DefinePlugin } = require('webpack')
 const gitRevision = require('git-revision')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+const packageInfo = require('./package.json')
 
 module.exports = {
   configureWebpack: {
@@ -23,5 +24,26 @@ module.exports = {
       }
     },
     disableHostCheck: true
+  },
+  pluginOptions: {
+    electronBuilder: {
+      externals: ['mongodb'],
+      builderOptions: {
+        // eslint-disable-next-line no-template-curly-in-string
+        artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
+        win: {
+          publisherName: packageInfo.author
+        },
+        linux: {
+          target: [
+            { target: 'AppImage', arch: ['x64', 'ia32'] },
+            { target: 'rpm', arch: ['x64', 'ia32'] },
+            { target: 'pacman', arch: ['x64', 'ia32'] },
+            { target: 'deb', arch: ['x64', 'ia32'] },
+            { target: 'tar.xz', arch: ['x64', 'ia32'] }
+          ]
+        }
+      }
+    }
   }
 }
