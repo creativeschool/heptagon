@@ -10,7 +10,7 @@
         </v-card>
       </v-flex>
       <!-- File Tree -->
-      <v-flex xs3 class="pa-2">
+      <v-flex xs3 class="pa-2" v-if="showTree">
         <v-card>
           <v-treeview :items="tree" v-model="selection" :active.sync="active" selectable return-object activatable hoverable dense open-all>
               <template v-slot:prepend="{ item, open }">
@@ -25,7 +25,7 @@
         </v-card>
       </v-flex>
       <!-- Main content -->
-      <v-flex xs9 class="pa-2">
+      <v-flex :xs9="showTree" :xs12="!showTree" class="pa-2">
         <!-- Selected file operations -->
         <template v-if="selection.length">
           <v-card>
@@ -69,7 +69,7 @@
                   </v-list-item>
                 </template>
                 <v-subheader inset v-if="displayFolders.length">文件夹</v-subheader>
-                <v-list-item v-for="([name, info], i) in displayFolders" :key="i" @click="path += name + '/'">
+                <v-list-item v-for="[name, info] in displayFolders" :key="info.id" @click="path += name + '/'">
                   <v-list-item-avatar>
                     <v-icon>mdi-folder</v-icon>
                   </v-list-item-avatar>
@@ -79,7 +79,7 @@
                   </v-list-item-content>
                 </v-list-item>
                 <v-subheader inset v-if="displayFiles.length">文件</v-subheader>
-                <v-list-item v-for="([name, item], i) in displayFiles" :key="i">
+                <v-list-item v-for="[name, item] in displayFiles" :key="item.id">
                   <v-list-item-avatar>
                     <v-icon>mdi-file</v-icon>
                   </v-list-item-avatar>
@@ -88,7 +88,7 @@
                     <v-list-item-subtitle>{{ item.versions.length }}版本</v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-btn icon>
+                    <v-btn icon @click="dialogId = item._id, dialog = true">
                       <v-icon>info</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -146,6 +146,9 @@
     <v-overlay absolute :value="loading">
       <v-progress-circular indeterminate></v-progress-circular>
     </v-overlay>
+    <v-dialog v-model="dialog" max-width="640px">
+      <file-detail :id="dialogId" v-if="dialog"/>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -153,9 +156,13 @@
 import { files, syncFile } from '@/db/file'
 import { bus } from '@/plugins/bus'
 import { generateTreeviewData } from '@/plugins/trie'
+import fileDetail from '@/components/filedetail.vue'
 
 export default {
   name: 'file',
+  components: {
+    fileDetail
+  },
   props: ['id'],
   data: () => ({
     files: [],
@@ -167,7 +174,10 @@ export default {
     isElectron: process.env.IS_ELECTRON,
     tree: [],
     selection: [],
-    active: []
+    active: [],
+    dialog: false,
+    dialogId: null,
+    showTree: false
   }),
   methods: {
     load () {
@@ -212,7 +222,7 @@ export default {
             if (folder) {
               folder.count++
             } else {
-              folders.set(name, { count: 1 })
+              folders.set(name, { count: 1, id: file.id })
             }
           }
         }

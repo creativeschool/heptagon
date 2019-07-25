@@ -20,7 +20,7 @@
               <v-list-item :to="`/course/${id}/msg`" exact>
                 <v-list-item-title>通知列表</v-list-item-title>
               </v-list-item>
-              <v-list-item :to="`/course/${id}/msg/new`" exact>
+              <v-list-item :to="`/course/${id}/msg/new`" v-if="priv.msg" exact>
                 <v-list-item-title>新建通知</v-list-item-title>
               </v-list-item>
             </v-list-group>
@@ -32,7 +32,7 @@
                 <v-list-item-title>文件管理</v-list-item-title>
               </v-list-item>
               <!-- https://github.com/vuejs/vue-router/issues/2040 -->
-              <v-list-item :to="`/course/${id}/file/upload`">
+              <v-list-item :to="`/course/${id}/file/upload`" v-if="priv.scope">
                 <v-list-item-title>文件上传</v-list-item-title>
               </v-list-item>
             </v-list-group>
@@ -54,6 +54,8 @@
 
 <script>
 import { getCourse, syncCourse } from '@/db/course'
+import { getPriv } from '@/db/ucmap'
+import { get } from '@/db/config'
 import { bus } from '@/plugins/bus'
 
 export default {
@@ -61,11 +63,13 @@ export default {
   props: ['id'],
   data: () => ({
     course: {},
+    priv: {},
     loading: false
   }),
   methods: {
     async load () {
       this.course = await getCourse(this.id)
+      this.priv = await getPriv(await get('current-user'), this.id)
       bus.$emit('title', this.course.name)
     },
     async sync () {

@@ -28,7 +28,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-    <v-dialog v-model="dialog">
+    <v-dialog v-model="dialog" max-width="640px">
       <msg-detail v-if="dialog" :id="currentId" @update="load"/>
     </v-dialog>
   </v-layout>

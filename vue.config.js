@@ -27,7 +27,7 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      externals: ['mongodb'],
+      externals: ['form-data'],
       builderOptions: {
         // eslint-disable-next-line no-template-curly-in-string
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',

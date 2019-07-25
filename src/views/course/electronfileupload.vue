@@ -7,26 +7,8 @@
           <v-tab :key="1">上传文件夹</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
-          <v-tab-item :key="0">
-            <v-card-text>
-              <v-text-field label="路径"/>
-              <v-combobox label="标签" multiple chips/>
-            </v-card-text>
-          </v-tab-item>
-          <v-tab-item :key="1">
-            <v-card-text>
-              <v-text-field label="路径"/>
-              <v-combobox label="标签" multiple chips/>
-              <v-checkbox label="为可识别的课件自动添加公开保护版本"/>
-            </v-card-text>
-            <v-card-text class="logs">
-              <pre></pre>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer/>
-              <v-btn color="primary">选择文件夹</v-btn>
-            </v-card-actions>
-          </v-tab-item>
+          <file-upload :key="0" :id="id"/>
+          <folder-upload :key="1" :id="id"/>
         </v-tabs-items>
       </v-card>
     </v-flex>
@@ -34,27 +16,24 @@
 </template>
 
 <script>
+import fileUpload from '@/components/fileupload.vue'
+import folderUpload from '@/components/folderupload.vue'
+import { bus } from '@/plugins/bus'
+
 export default {
-  name: 'fileUpload',
+  name: 'electronFileUpload',
+  components: {
+    fileUpload,
+    folderUpload
+  },
+  props: ['id'],
   data: () => ({
-    path: '/',
-    tags: [],
-    versions: [],
     tab: 0
   }),
-  props: ['id'],
-  methods: {
-    provide () {
-      //
-    },
-    create () {
-      //
-    }
-  },
   created () {
     const query = this.$route.query
-    this.path = query.path || '/'
     this.tab = +!!query.folder
+    bus.$emit('title', '文件上传')
   }
 }
 </script>
