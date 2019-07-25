@@ -6,8 +6,13 @@ import { get, set } from './config'
 import { getCourse } from './course'
 import { minArraySyncInterval } from './limits'
 
+/**
+ * @typedef {{ scope: string, msg: boolean }} Priv
+ * @typedef {{ _id: string, user: string, course: string, created: number, updated: number, priv: Priv }} UCMap
+ */
+
 const log = debug('hep:db:ucmap')
-/** @type {import('dexie').Dexie.Table} */
+/** @type {import('dexie').Dexie.Table<UCMap>} */
 export const ucmap = db.ucmap
 
 export const syncUserUcmap = async () => {
@@ -36,8 +41,20 @@ export const syncCourseUcmap = async (courseId) => {
   await set('ucmap-sync-' + courseId, now)
 }
 
+/**
+ * @param {string} user
+ * @param {string} course
+ * @returns {Priv}
+ */
 export const getPriv = async (user, course) => {
   log(`GetPriv user=${user} course=${course}`)
   const mapper = await ucmap.where({ user, course }).first()
   return mapper.priv
+}
+
+/**
+ * @param {string} course
+ */
+export const getCurrentPriv = async (course) => {
+  return getPriv(await get('current-user'), course)
 }

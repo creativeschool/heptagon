@@ -42,8 +42,7 @@
 <script>
 import { formatDate } from '@/plugins/formatter'
 import { bus } from '@/plugins/bus'
-import { getPriv } from '@/db/ucmap'
-import { get } from '@/db/config'
+import { getCurrentPriv } from '@/db/ucmap'
 
 export default {
   name: 'index',
@@ -53,7 +52,7 @@ export default {
   }),
   methods: {
     async load () {
-      this.priv = await getPriv(await get('current-user'), this.id)
+      this.priv = await getCurrentPriv(this.id)
       bus.$emit('title', '基本信息 - ' + this.$parent.course.name)
     },
     formatDate

@@ -6,6 +6,7 @@ const concat = require('concat-stream')
 
 /**
  * @param {File} file
+ * @returns {Promise<string>}
  */
 export const provide = file => new Promise((resolve, reject) => {
   if (!fs.existsSync(file.path)) return reject(new Error('文件未找到'))

@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-start wrap justify-start>
-    <v-flex xs12 class="pa-2">
+    <v-flex xs12>
       <v-card>
         <v-card-actions>
           <v-spacer/>
@@ -8,7 +8,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-    <v-flex xs12 class="pa-2" v-for="(msg, i) in msgs" :key="i">
+    <v-flex xs12 v-for="(msg, i) in msgs" :key="i">
       <v-card hover @click.stop="currentId = msg._id, dialog = true">
         <v-card-text v-html="renderMarkdown(msg.content)" class="content"/>
         <v-card-actions>

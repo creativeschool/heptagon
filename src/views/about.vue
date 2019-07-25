@@ -26,17 +26,19 @@
         <v-divider/>
         <v-card-text>
           <v-card-title>本项目基于</v-card-title>
-          <v-layout justify-space-around align-content-start>
-            <v-flex xs4 class="pa-4">
-              <img src="@/assets/vue.png" width="100%" @click="openUrl('https://vuejs.org/')" style="cursor: pointer" class="dep"/>
-            </v-flex>
-            <v-flex xs4 class="pa-4">
-              <img src="@/assets/vuetify.png" width="100%" @click="openUrl('https://vuetifyjs.com')" style="cursor: pointer" class="dep"/>
-            </v-flex>
-            <v-flex xs4 class="pa-4">
-              <img src="@/assets/electron.png" width="100%" @click="openUrl('https://electronjs.org/')" style="cursor: pointer" class="dep"/>
-            </v-flex>
-          </v-layout>
+          <v-container grid-list-xl>
+            <v-layout justify-space-around align-content-start>
+              <v-flex xs4>
+                <img src="@/assets/vue.png" width="100%" @click="openUrl('https://vuejs.org/')" style="cursor: pointer" class="dep"/>
+              </v-flex>
+              <v-flex xs4>
+                <img src="@/assets/vuetify.png" width="100%" @click="openUrl('https://vuetifyjs.com')" style="cursor: pointer" class="dep"/>
+              </v-flex>
+              <v-flex xs4>
+                <img src="@/assets/electron.png" width="100%" @click="openUrl('https://electronjs.org/')" style="cursor: pointer" class="dep"/>
+              </v-flex>
+            </v-layout>
+          </v-container>
         </v-card-text>
         <v-divider/>
         <v-card-actions>

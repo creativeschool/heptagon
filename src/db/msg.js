@@ -6,7 +6,7 @@ import { db } from './dexie'
 import { get, set } from './config'
 import { bus } from '@/plugins/bus'
 import { minArraySyncInterval } from './limits'
-import { getPriv } from './ucmap'
+import { getCurrentPriv } from './ucmap'
 import { compareArraySimple } from '@/plugins/utils'
 
 /**
@@ -45,7 +45,7 @@ export const syncMsg = async (courseId, noLimit, noToast) => {
 export const createMsg = async (courseId, content, tags) => {
   if (!await isLoggedIn()) throw new Error('需要登录')
   const obj = await getCourse(courseId)
-  const priv = await getPriv(await get('current-user'), courseId)
+  const priv = await getCurrentPriv(courseId)
   if (!priv.msg) throw new Error('无权限')
   const res = await axios.post('/course/msg/new', { courseId, content, tags })
   log(`@${obj.name} created ${res.data}`)
@@ -67,6 +67,6 @@ export const editMsg = async (msgId, content, tags) => {
   if (!compareArraySimple(msg.tags, tags)) delta.tags = tags
   await axios.post('/course/msg/edit', delta)
   log(`@${msgId} Edit 🆗`)
-  msgs.update(msgId, { content, tags })
+  await msgs.update(msgId, { content, tags })
   bus.$emit('toast', `通知更新成功`)
 }

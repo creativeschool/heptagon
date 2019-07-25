@@ -1,17 +1,10 @@
 import Dexie from 'dexie'
 import { bus } from '@/plugins/bus'
+import versions from './versions'
 
 export const db = new Dexie('heptagon')
 
-db.version(2).stores({
-  users: `&_id, name, email, *tags`,
-  courses: `&_id, name, *tags`,
-  ucmap: `&_id, user, course, [user+course]`,
-  files: `&_id, course, path, *tags`,
-  msgs: `&_id, course, user, *tags`,
-  configs: `&key`,
-  logs: `++id, issuer, created`
-})
+versions.forEach(([i, s]) => db.version(i).stores(s))
 
 export const reinit = async () => {
   await db.delete()

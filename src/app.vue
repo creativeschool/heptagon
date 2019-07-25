@@ -11,8 +11,8 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-content>
-      <v-container fluid fill-height>
-        <router-view></router-view>
+      <v-container fluid fill-height grid-list-md>
+        <router-view/>
       </v-container>
     </v-content>
 

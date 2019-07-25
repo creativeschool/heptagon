@@ -1,6 +1,6 @@
 <template>
   <v-layout align-content-start justify-space-between wrap>
-    <v-flex lg2 md3 sm4 xs12 class="pa-2">
+    <v-flex lg2 md3 sm4 xs12>
       <v-card>
         <v-card-title>
           {{ course.name }}
@@ -45,7 +45,7 @@
       </v-card>
     </v-flex>
     <v-flex lg10 md9 sm8 xs12>
-      <v-container fluid>
+      <v-container fluid grid-list-md>
         <router-view/>
       </v-container>
     </v-flex>
@@ -54,8 +54,7 @@
 
 <script>
 import { getCourse, syncCourse } from '@/db/course'
-import { getPriv } from '@/db/ucmap'
-import { get } from '@/db/config'
+import { getCurrentPriv } from '@/db/ucmap'
 import { bus } from '@/plugins/bus'
 
 export default {
@@ -69,7 +68,7 @@ export default {
   methods: {
     async load () {
       this.course = await getCourse(this.id)
-      this.priv = await getPriv(await get('current-user'), this.id)
+      this.priv = await getCurrentPriv(this.id)
       bus.$emit('title', this.course.name)
     },
     async sync () {

@@ -1,7 +1,7 @@
 <template>
   <v-layout wrap>
     <template v-if="files.length">
-      <v-flex xs12 class="pa-2">
+      <v-flex xs12>
         <v-card>
           <v-card-actions>
             <v-spacer/>
@@ -10,7 +10,7 @@
         </v-card>
       </v-flex>
       <!-- File Tree -->
-      <v-flex xs3 class="pa-2" v-if="showTree">
+      <v-flex xs3 v-if="showTree">
         <v-card>
           <v-treeview :items="tree" v-model="selection" :active.sync="active" selectable return-object activatable hoverable dense open-all>
               <template v-slot:prepend="{ item, open }">
@@ -25,7 +25,7 @@
         </v-card>
       </v-flex>
       <!-- Main content -->
-      <v-flex :xs9="showTree" :xs12="!showTree" class="pa-2">
+      <v-flex :xs9="showTree" :xs12="!showTree">
         <!-- Selected file operations -->
         <template v-if="selection.length">
           <v-card>
@@ -52,22 +52,19 @@
         <template v-else>
           <v-card>
             <v-card-text>
-              <v-text-field label="当前路径" v-model="realpath" hide-details class="ma-2" @blur="path = realpath" @keyup.native.enter="path = realpath"/>
+              <v-text-field label="当前路径" v-model="realpath" hide-details @blur="path = realpath" @keyup.native.enter="path = realpath"/>
             </v-card-text>
             <v-divider/>
             <template v-if="displayFiles.length || displayFolders.length">
               <v-list subheader two-line>
-                <template v-if="path !== '/'">
-                  <v-subheader inset>父目录</v-subheader>
-                  <v-list-item @click="path = path.substr(0, path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1)">
-                    <v-list-item-avatar>
-                      <v-icon>mdi-folder</v-icon>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      ..
-                    </v-list-item-content>
-                  </v-list-item>
-                </template>
+                <v-list-item @click="path = path.substr(0, path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1)" :disabled="path === '/'">
+                  <v-list-item-avatar>
+                    <v-icon>mdi-arrow-up</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    ..
+                  </v-list-item-content>
+                </v-list-item>
                 <v-subheader inset v-if="displayFolders.length">文件夹</v-subheader>
                 <v-list-item v-for="[name, info] in displayFolders" :key="info.id" @click="path += name + '/'">
                   <v-list-item-avatar>
@@ -80,8 +77,11 @@
                 </v-list-item>
                 <v-subheader inset v-if="displayFiles.length">文件</v-subheader>
                 <v-list-item v-for="[name, item] in displayFiles" :key="item.id">
-                  <v-list-item-avatar>
-                    <v-icon>mdi-file</v-icon>
+                  <v-list-item-avatar v-if="item.versions.length">
+                    <v-icon>{{ fileIcon(item.versions[0].type) }}</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-avatar v-else>
+                    <v-icon>mdi-file-outline</v-icon>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ name }}</v-list-item-title>
@@ -147,7 +147,7 @@
       <v-progress-circular indeterminate></v-progress-circular>
     </v-overlay>
     <v-dialog v-model="dialog" max-width="640px">
-      <file-detail :id="dialogId" v-if="dialog"/>
+      <file-detail :id="dialogId" v-if="dialog" @update="load"/>
     </v-dialog>
   </v-layout>
 </template>
@@ -156,6 +156,7 @@
 import { files, syncFile } from '@/db/file'
 import { bus } from '@/plugins/bus'
 import { generateTreeviewData } from '@/plugins/trie'
+import { fileIcon } from '@/plugins/icons'
 import fileDetail from '@/components/filedetail.vue'
 
 export default {
@@ -238,7 +239,8 @@ export default {
     },
     uploadFolder () {
       this.$router.push({ path: `/course/${this.$parent.course._id}/file/upload`, query: { path: this.path, folder: true } })
-    }
+    },
+    fileIcon
   },
   watch: {
     id: {
