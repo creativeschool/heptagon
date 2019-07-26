@@ -24,7 +24,9 @@ module.exports = {
         'GIT_BRANCH': JSON.stringify(gitRevision('branch')),
         'APP_NAME': JSON.stringify('教学资源开放平台'),
         'BUILD_DATE': JSON.stringify((new Date()).toLocaleString()),
-        'BUILD_MACHINE': JSON.stringify(os.hostname())
+        'BUILD_MACHINE': JSON.stringify(os.hostname()),
+        'EPDF_PSK': JSON.stringify('ZhangZisu Opensource'),
+        'EPDF_PSK_SALT': JSON.stringify('https://opensource.zhangzisu.cn')
       })
     ]
   },

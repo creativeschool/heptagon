@@ -21,6 +21,7 @@
     "debug": "^4.1.1",
     "dexie": "^2.0.4",
     "file-saver": "^2.0.2",
+    "fs-extra": "^8.1.0",
     "gravatar": "^1.8.0",
     "marked": "^0.7.0",
     "material-design-icons-iconfont": "^5.0.1",
@@ -30,6 +31,7 @@
     "vuetify": "^2.0.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
     "@types/pdfjs-dist": "^2.0.1",
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-plugin-eslint": "^3.9.0",
