@@ -1,7 +1,7 @@
-const fs = require('fs-extra')
+const fs = require('fs')
 
-export const readEPDF = async src => {
-  const buffer = await fs.readFile(src)
+export const readEPDF = src => {
+  const buffer = fs.readFileSync(src)
   const version = buffer.readUInt32LE(0)
   const metaLen = buffer.readUInt32LE(4)
   const meta = JSON.parse(buffer.toString('utf-8', 8, 8 + metaLen))

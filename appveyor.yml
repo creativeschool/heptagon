@@ -8,6 +8,10 @@ branches:
 environment:
   GH_TOKEN:
     secure: HHISy+sGq57hKlEtc0o7esy0gVWqL+0LZjmvVQa38W66OfqEs/LBhJhtI6MIC66y
+  PSK:
+    secure: mQUAAIIajC5y3YTk+xMxymjd7Yr57kbjAHQKwPQ2m+4=
+  PSKSALT:
+    secure: c3Apj8ig8QbjO4EvQH7ZMA==
 
 image: Visual Studio 2017
 

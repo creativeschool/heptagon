@@ -1,5 +1,4 @@
 const crypto = require('crypto')
+const simplencrypt = require('simplencrypt')
 
-/* global EPDF_PSK, EPDF_PSK_SALT */
-
-export const pass = crypto.scryptSync(EPDF_PSK, EPDF_PSK_SALT, 32)
+export const pass = crypto.scryptSync(simplencrypt.getKey(), simplencrypt.getSalt(), 32)

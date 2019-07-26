@@ -22,4 +22,7 @@ yarn-error.log*
 
 # Electron builder
 /dist_electron
+/resources
+
+# Node-gyp
 /build

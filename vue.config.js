@@ -24,9 +24,7 @@ module.exports = {
         'GIT_BRANCH': JSON.stringify(gitRevision('branch')),
         'APP_NAME': JSON.stringify('教学资源开放平台'),
         'BUILD_DATE': JSON.stringify((new Date()).toLocaleString()),
-        'BUILD_MACHINE': JSON.stringify(os.hostname()),
-        'EPDF_PSK': JSON.stringify('ZhangZisu Opensource'),
-        'EPDF_PSK_SALT': JSON.stringify('https://opensource.zhangzisu.cn')
+        'BUILD_MACHINE': JSON.stringify(os.hostname())
       })
     ]
   },
@@ -40,8 +38,11 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      externals: ['form-data'],
+      externals: ['form-data', 'simplencrypt'],
       builderOptions: {
+        directories: {
+          buildResources: 'resources'
+        },
         // eslint-disable-next-line no-template-curly-in-string
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
         win: {
