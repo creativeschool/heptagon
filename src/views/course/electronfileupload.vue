@@ -4,11 +4,11 @@
       <v-card>
         <v-tabs grow v-model="tab">
           <v-tab :key="0">上传文件</v-tab>
-          <v-tab :key="1">上传文件夹</v-tab>
+          <!-- <v-tab :key="1">上传文件夹</v-tab> -->
         </v-tabs>
         <v-tabs-items v-model="tab">
           <file-upload :key="0" :id="id"/>
-          <folder-upload :key="1" :id="id"/>
+          <!-- <folder-upload :key="1" :id="id"/> -->
         </v-tabs-items>
       </v-card>
     </v-flex>

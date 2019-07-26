@@ -84,10 +84,11 @@ export const editFile = async (fileId, path, tags, versions) => {
  */
 const normalizeVersions = async versions => {
   for (const version of versions) {
-    if (!version.hash) {
-      if (!version.file) throw new Error('请选择文件')
+    if (version.file) {
       version.hash = await provide(version.file)
       delete version.file
+    } else if (!version.hash) {
+      throw new Error('请选择文件')
     }
   }
 }

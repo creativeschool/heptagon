@@ -37,13 +37,5 @@ module.exports = {
   reload () {
     remote.app.relaunch()
     remote.app.exit(0)
-  },
-  /**
-   *
-   * @param {import('electron').OpenDialogOptions} options
-   * @param {(filePaths?: string[], bookmarks?: string[]) => void} cb
-   */
-  showOpenDialog (options, cb) {
-    remote.dialog.showOpenDialog(currentWindow, options, cb)
   }
 }

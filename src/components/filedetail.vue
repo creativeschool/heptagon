@@ -48,7 +48,7 @@
                     <v-list-item-subtitle>{{ version.type || '未知类型' }}</v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action>
-                    <v-btn icon>
+                    <v-btn icon @click="download(i)">
                       <v-icon>mdi-download-network</v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -100,14 +100,14 @@
               </v-flex>
             </v-layout>
           </v-container>
-          <v-file-input v-model="version.file" label="选择文件" :placeholder="version.hash ? '若不希望替换请勿选择' : ''"/>
+          <v-file-input :disabled="loading" v-model="version.file" label="选择文件" :placeholder="version.hash ? '若不希望替换请勿选择' : ''"/>
           <v-divider/>
         </v-card-text>
         <v-card-actions>
-          <v-file-input label="新版本" v-model="newVersion" prepend-icon="mdi-plus"/>
+          <v-file-input :disabled="loading" label="新版本" v-model="newVersion" prepend-icon="mdi-plus"/>
           <v-spacer/>
-          <v-btn color="error" @click="load">重置</v-btn>
-          <v-btn color="primary" @click="save">提交</v-btn>
+          <v-btn color="error" @click="load" :disabled="loading">重置</v-btn>
+          <v-btn color="primary" @click="save" :loading="loading">提交</v-btn>
         </v-card-actions>
       </v-tab-item>
     </v-tabs-items>
@@ -119,6 +119,11 @@ import { files, editFile } from '@/db/file'
 import { getCurrentPriv } from '@/db/ucmap'
 import { formatDate } from '@/plugins/formatter'
 import { fileIcon } from '@/plugins/icons'
+import { addUri } from '@/plugins/aria2'
+import { axios, resolveUrl } from '@/plugins/axios'
+import { bus } from '@/plugins/bus'
+
+const { remote } = require('electron')
 
 export default {
   name: 'fileDetail',
@@ -151,6 +156,7 @@ export default {
       this.showEdit = this.file.path.startsWith(this.scope)
     },
     async save () {
+      console.log(this.versions)
       this.loading = true
       editFile(this.id, this.path, this.tags, this.versions)
         .then(this.load)
@@ -161,6 +167,34 @@ export default {
     fileIcon,
     validPath () {
       return this.path.startsWith(this.scope) || `路径必须位于\`${this.scope}\`下`
+    },
+    download (version) {
+      remote.dialog.showSaveDialog(
+        remote.getCurrentWindow(),
+        { defaultPath: `${this.name}.${this.file.versions[version].name}.${this.file.versions[version].type}` },
+        path => {
+          if (!path) return
+          path = process.platform === 'win32' ? path.replace(/\\/g, '/') : path
+          const out = path.substr(path.lastIndexOf('/') + 1)
+          const dir = path.substr(0, path.length - out.length)
+          console.log(out, dir)
+          addUri(
+            [ resolveUrl('/content/download') ],
+            {
+              header: [
+                `x-access-token: ${axios.defaults.headers['x-access-token']}`,
+                `x-course-id: ${this.file.course}`,
+                `x-file-id: ${this.id}`,
+                `x-file-version: ${version}`
+              ],
+              dir,
+              out
+            }
+          ).then(() => {
+            bus.$emit('toast', '已添加至下载任务')
+          })
+        }
+      )
     }
   },
   created () {
