@@ -55,13 +55,11 @@ const createFileWindow = file => {
     icon: path.join(__static, 'logo.png')
   })
 
-  win.webContents.executeJavaScript(`window.epdfPath = '${file}'`)
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'epdf.html')
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'epdf.html#' + encodeURIComponent(file))
   } else {
     createProtocol('app')
-    win.loadURL('app://./epdf.html')
+    win.loadURL('app://./epdf.html#' + encodeURIComponent(file))
   }
 
   win.on('closed', () => {

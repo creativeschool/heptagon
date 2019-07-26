@@ -153,7 +153,6 @@ export default {
       this.showEdit = this.file.path.startsWith(this.scope)
     },
     async save () {
-      console.log(this.versions)
       this.loading = true
       editFile(this.id, this.path, this.tags, this.versions)
         .then(this.load)

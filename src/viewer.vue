@@ -55,6 +55,9 @@
       <v-container fluid grid-list-md>
         <v-layout align-content-center justify-space-around>
           <v-card>
+            <v-alert v-model="showAlert" type="error">
+              {{ alert }}
+            </v-alert>
             <canvas ref="canvas"/>
             <v-overlay :value="rendering" absolute>
               <v-progress-circular indeterminate/>
@@ -74,10 +77,11 @@
 <script>
 import pdf from 'pdfjs-dist/webpack'
 import { version } from '@/../package.json'
+import { getPDF } from './epdf/reader'
 
 const electron = require('electron')
 const remote = electron.remote
-const currentWindow = remote.getCurrentWebContents()
+const currentWindow = remote.getCurrentWindow()
 
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
 
@@ -99,22 +103,34 @@ export default {
     rendering: false,
     scales: [0.5, 1, 1.5, 2],
     rotation: 0,
-    wrapper: null
+    wrapper: null,
+    showAlert: false,
+    alert: '',
+    epdfPath: decodeURIComponent(location.hash.substr(1))
   }),
-  created () {
-    pdf
-      .getDocument('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
-      .promise
-      .then(doc => {
-        this.doc = doc
-        this.render(this.index = 1)
-        doc.getOutline().then(x => console.log(x))
-      })
-  },
   mounted () {
     const main = this.$refs.content
     this.wrapper = main.$el.children[0]
     this.wrapper.classList.add('content-wrap')
+    if (!this.epdfPath) {
+      this.showAlert = true
+      this.alert = '未找到文件'
+    } else {
+      getPDF(this.epdfPath)
+        .then(data => {
+          pdf
+            .getDocument({ data })
+            .promise
+            .then(doc => {
+              this.doc = doc
+              this.render(this.index = 1)
+            })
+        })
+        .catch(e => {
+          this.showAlert = true
+          this.alert = e.message
+        })
+    }
   },
   methods: {
     render () {
@@ -152,7 +168,6 @@ export default {
           const viewport = page.getViewport(1, this.rotation)
           const vw = viewport.width
           const vh = viewport.height
-          console.log(aw, ah, vw, vh)
           this.scale = Math.min(aw / vw, ah / vh)
         })
     },
