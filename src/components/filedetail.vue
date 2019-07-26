@@ -115,15 +115,12 @@
 </template>
 
 <script>
-import { files, editFile } from '@/db/file'
+import { files, editFile, getDownloadToken } from '@/db/file'
 import { getCurrentPriv } from '@/db/ucmap'
 import { formatDate } from '@/plugins/formatter'
 import { fileIcon } from '@/plugins/icons'
-import { addUri } from '@/plugins/aria2'
-import { axios, resolveUrl } from '@/plugins/axios'
-import { bus } from '@/plugins/bus'
-
-const { remote } = require('electron')
+import { axios } from '@/plugins/axios'
+import core from '@/plugins/core'
 
 export default {
   name: 'fileDetail',
@@ -168,33 +165,10 @@ export default {
     validPath () {
       return this.path.startsWith(this.scope) || `路径必须位于\`${this.scope}\`下`
     },
-    download (version) {
-      remote.dialog.showSaveDialog(
-        remote.getCurrentWindow(),
-        { defaultPath: `${this.name}.${this.file.versions[version].name}.${this.file.versions[version].type}` },
-        path => {
-          if (!path) return
-          path = process.platform === 'win32' ? path.replace(/\\/g, '/') : path
-          const out = path.substr(path.lastIndexOf('/') + 1)
-          const dir = path.substr(0, path.length - out.length)
-          console.log(out, dir)
-          addUri(
-            [ resolveUrl('/content/download') ],
-            {
-              header: [
-                `x-access-token: ${axios.defaults.headers['x-access-token']}`,
-                `x-course-id: ${this.file.course}`,
-                `x-file-id: ${this.id}`,
-                `x-file-version: ${version}`
-              ],
-              dir,
-              out
-            }
-          ).then(() => {
-            bus.$emit('toast', '已添加至下载任务')
-          })
-        }
-      )
+    async download (version) {
+      const token = await getDownloadToken(this.id, version)
+      const url = axios.defaults.baseURL + '/download/' + token
+      core.openUrl(url)
     }
   },
   created () {

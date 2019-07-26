@@ -3,20 +3,17 @@
 import path from 'path'
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import { existsSync } from 'fs'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win
-
-// Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
+
+let win
 
 /* global __static */
 
-function createWindow () {
-  // Create the browser window.
+const createMainWindow = () => {
   win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -43,7 +40,43 @@ function createWindow () {
   })
 }
 
-// Quit when all windows are closed.
+const createFileWindow = file => {
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      defaultFontFamily: {
+        standard: '微软雅黑',
+        sansSerif: '微软雅黑'
+      }
+    },
+    frame: false,
+    icon: path.join(__static, 'logo.png')
+  })
+
+  win.webContents.executeJavaScript(`window.epdfPath = '${file}'`)
+
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/epdf.html')
+  } else {
+    createProtocol('app')
+    win.loadURL('app://./epdf.html')
+  }
+
+  win.on('closed', () => {
+    win = null
+  })
+}
+
+const startup = () => {
+  if (process.argv.length >= 2 && existsSync(process.argv[1])) {
+    createFileWindow(process.argv[1])
+  } else {
+    createMainWindow()
+  }
+}
+
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
@@ -53,10 +86,8 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow()
+    startup()
   }
 })
 
@@ -72,7 +103,7 @@ app.on('ready', async () => {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-  createWindow()
+  startup()
 })
 
 // Exit cleanly on request from parent process in development mode.

@@ -52,7 +52,7 @@
         <template v-else>
           <v-card>
             <v-card-text>
-              <v-text-field label="当前路径" v-model="realpath" hide-details @blur="path = realpath" @keyup.native.enter="path = realpath"/>
+              <v-text-field label="当前路径" v-model.lazy="realpath" hide-details @blur="path = realpath" @keyup.native.enter="path = realpath"/>
             </v-card-text>
             <v-divider/>
             <template v-if="displayFiles.length || displayFolders.length">

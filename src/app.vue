@@ -47,7 +47,7 @@ import { syncAllCourse } from './db/course'
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
     systemBar
   },

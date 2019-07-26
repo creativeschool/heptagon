@@ -2,9 +2,20 @@ const os = require('os')
 const { DefinePlugin } = require('webpack')
 const gitRevision = require('git-revision')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
-const packageInfo = require('./package.json')
 
 module.exports = {
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html'
+    },
+    epdf: {
+      entry: 'src/epdf/main.js',
+      template: 'public/epdf.html',
+      filename: 'epdf.html'
+    }
+  },
   configureWebpack: {
     plugins: [
       new VuetifyLoaderPlugin(),
@@ -32,7 +43,14 @@ module.exports = {
         // eslint-disable-next-line no-template-curly-in-string
         artifactName: '${productName}-${version}-${platform}-${arch}.${ext}',
         win: {
-          publisherName: packageInfo.author
+          extraFiles: [
+            { from: 'bin/win', to: 'bin' }
+          ],
+          fileAssociations: {
+            ext: 'epdf',
+            description: 'Encrypted Portable Document Format',
+            icon: 'icons/icon.ico'
+          }
         },
         linux: {
           target: [

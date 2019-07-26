@@ -92,3 +92,11 @@ const normalizeVersions = async versions => {
     }
   }
 }
+
+export const getDownloadToken = async (fileId, versionId) => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const file = await files.get(fileId)
+  if (!file) throw new Error('无此文件')
+  const res = await axios.post('/course/file/content', { courseId: file.course, fileId, versionId })
+  return res.data
+}

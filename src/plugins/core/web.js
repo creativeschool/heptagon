@@ -1,4 +1,4 @@
-const { bus } = require('./bus')
+const { bus } = require('../bus')
 
 /* global GIT_HASH, GIT_BRANCH, BUILD_DATE, BUILD_MACHINE */
 

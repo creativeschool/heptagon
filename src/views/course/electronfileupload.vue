@@ -24,6 +24,7 @@ export default {
   name: 'electronFileUpload',
   components: {
     fileUpload,
+    // eslint-disable-next-line vue/no-unused-components
     folderUpload
   },
   props: ['id'],
