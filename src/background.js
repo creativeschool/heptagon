@@ -58,7 +58,7 @@ const createFileWindow = file => {
   win.webContents.executeJavaScript(`window.epdfPath = '${file}'`)
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/epdf.html')
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'epdf.html')
   } else {
     createProtocol('app')
     win.loadURL('app://./epdf.html')
@@ -70,10 +70,18 @@ const createFileWindow = file => {
 }
 
 const startup = () => {
-  if (process.argv.length >= 2 && existsSync(process.argv[1])) {
-    createFileWindow(process.argv[1])
+  if (isDevelopment) {
+    if (process.env.TEST_FILE) {
+      createFileWindow(process.env.TEST_FILE)
+    } else {
+      createMainWindow()
+    }
   } else {
-    createMainWindow()
+    if (process.argv.length >= 2 && existsSync(process.argv[1])) {
+      createFileWindow(process.argv[1])
+    } else {
+      createMainWindow()
+    }
   }
 }
 

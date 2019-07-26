@@ -4,9 +4,13 @@
       <v-avatar size="32" class="mr-2">
         <img src="@/../public/logo.png"/>
       </v-avatar>
+      <v-btn text @click="devTools" style="-webkit-app-region: no-drag">开发者工具</v-btn>
       <v-spacer/>
         {{ title }}{{ title ? ' - ' : '' }}EPDF Viewer
       <v-spacer/>
+      <v-icon @click="minimize" style="-webkit-app-region: no-drag">mdi-minus</v-icon>
+      <v-icon @click="maximize" style="-webkit-app-region: no-drag">mdi-plus</v-icon>
+      <v-icon @click="close" style="-webkit-app-region: no-drag">mdi-close</v-icon>
     </v-system-bar>
     <v-app-bar app>
       <v-toolbar-title>EPDF Viewer</v-toolbar-title>
@@ -70,6 +74,10 @@
 <script>
 import pdf from 'pdfjs-dist/webpack'
 import { version } from '@/../package.json'
+
+const electron = require('electron')
+const remote = electron.remote
+const currentWindow = remote.getCurrentWebContents()
 
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
 
@@ -147,6 +155,21 @@ export default {
           console.log(aw, ah, vw, vh)
           this.scale = Math.min(aw / vw, ah / vh)
         })
+    },
+    close () {
+      currentWindow.close()
+    },
+    maximize () {
+      currentWindow.isMaximized() ? currentWindow.restore() : currentWindow.maximize()
+    },
+    minimize () {
+      currentWindow.minimize()
+    },
+    devTools () {
+      currentWindow.webContents.openDevTools()
+    },
+    openUrl (url) {
+      electron.shell.openExternal(url)
     }
   },
   watch: {

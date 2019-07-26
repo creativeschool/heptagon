@@ -11,7 +11,7 @@ module.exports = {
       filename: 'index.html'
     },
     epdf: {
-      entry: 'src/epdf/main.js',
+      entry: 'src/viewer.js',
       template: 'public/epdf.html',
       filename: 'epdf.html'
     }
