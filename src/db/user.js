@@ -58,3 +58,22 @@ export const getUser = async (userId) => {
   if (user) return user
   throw new Error('无此用户')
 }
+
+/**
+ * @param {string} email
+ */
+export const editProfile = async (email) => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  await axios.post('/user/edit', { email })
+  await users.update(await get('current-user'), { email })
+}
+
+/**
+ * @param {string} oldPwd
+ * @param {string} newPwd
+ */
+export const chpwd = async (oldPwd, newPwd) => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const res = await axios.post('/user/pass', { old: oldPwd, new: newPwd })
+  await set('x-access-token', res.data)
+}

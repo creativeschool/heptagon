@@ -1,9 +1,11 @@
+import fs from 'fs'
+import crypto from 'crypto'
+import concat from 'concat-stream'
+import NodeFormData from 'form-data'
 import { axios } from './axios'
-
-const fs = require('fs')
-const crypto = require('crypto')
-const concat = require('concat-stream')
-const NodeFormData = require('form-data')
+import { normalizePath, filetype } from './path'
+import { createFile } from '@/db/file'
+import { provideOfficeEPDF, providePdfEPDF, supportedExts } from '@/bin/officetopdf'
 
 /**
  * @param {File} file
@@ -38,3 +40,36 @@ export const provideNative = file => new Promise((resolve, reject) => {
         .catch(reject)
     }))
 })
+
+/**
+ * @param {string} courseId
+ * @param {string[]} tags
+ * @param {string} remote
+ * @param {string} npath
+ */
+export const createJobCreator = (courseId, tags, remote, npath) =>
+  async path => {
+    let p = normalizePath(path)
+    p = p.substr(npath.length + 1)
+    p = remote + p
+    const fhash = await provideNative(path)
+    const ftype = filetype(path)
+    if (ftype === 'pdf') {
+      const shash = await providePdfEPDF(path)
+      await createFile(courseId, p, tags, [
+        { hash: fhash, name: '默认', type: filetype(path) },
+        { hash: shash, name: '!公开', type: 'epdf' }
+      ])
+    } else if (supportedExts.includes(ftype)) {
+      const shash = await provideOfficeEPDF(path)
+      await createFile(courseId, p, tags, [
+        { hash: fhash, name: '默认', type: filetype(path) },
+        { hash: shash, name: '!公开', type: 'epdf' }
+      ])
+    } else {
+      await createFile(courseId, p, tags, [
+        { hash: fhash, name: '默认', type: filetype(path) }
+      ])
+    }
+    return `${path} → ${p}`
+  }

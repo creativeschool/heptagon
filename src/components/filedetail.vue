@@ -120,6 +120,7 @@ import { getCurrentPriv } from '@/db/ucmap'
 import { formatDate } from '@/plugins/formatter'
 import { fileIcon } from '@/plugins/icons'
 import { axios } from '@/plugins/axios'
+import { normalizePath } from '@/plugins/path'
 import core from '@/plugins/core'
 
 export default {
@@ -178,7 +179,7 @@ export default {
     newVersion: {
       handler () {
         if (this.newVersion) {
-          const path = process.platform === 'win32' ? this.newVersion.path.replace(/\\/g, '/') : this.newVersion.path
+          const path = normalizePath(this.newVersion.path)
           const name = path.substr(path.lastIndexOf('/') + 1)
           const ext = name.substr(name.lastIndexOf('.') + 1)
           this.versions.push({

@@ -6,7 +6,7 @@
       <v-spacer />
       <v-toolbar-items>
         <v-btn text to="/">首页</v-btn>
-        <v-btn text to="/info">同步信息</v-btn>
+        <v-btn text to="/info" v-if="isDevelopment">同步信息</v-btn>
         <v-btn text to="/client" v-if="!isElectron">下载客户端</v-btn>
         <v-btn text to="/tool" v-else>实用工具</v-btn>
       </v-toolbar-items>
@@ -57,6 +57,7 @@ export default {
     snackbar: false,
     loading: true,
     isElectron: process.env.IS_ELECTRON,
+    isDevelopment: process.env.NODE_ENV !== 'production',
     appName: APP_NAME,
     build: {
       version,

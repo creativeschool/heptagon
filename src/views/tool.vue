@@ -50,13 +50,14 @@
 <script>
 import { remote } from 'electron'
 import { bus } from '@/plugins/bus'
+import { normalizePath } from '@/plugins/path'
 import { convertPDF } from '@/epdf/writer'
 import { pdfFilter, epdfFilter } from '@/epdf'
 import { officeFilters, officeToPDF, officeToEPDF } from '@/bin/officetopdf'
 
 const current = remote.getCurrentWindow()
 const basename = p => {
-  p = process.platform === 'win32' ? p.replace(/\\/g, '/') : p
+  p = normalizePath(p)
   p = p.substr(p.lastIndexOf('/') + 1)
   const i = p.lastIndexOf('.')
   if (i === -1) return p

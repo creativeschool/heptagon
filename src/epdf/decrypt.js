@@ -1,7 +1,6 @@
 import { pass } from './pass'
 import { createDecipheriv } from 'crypto'
-
-const concat = require('concat-stream')
+import concat from 'concat-stream'
 
 /**
  * @param {Buffer} buffer

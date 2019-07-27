@@ -24,6 +24,7 @@
     "file-saver": "^2.0.2",
     "form-data": "^2.5.0",
     "gravatar": "^1.8.0",
+    "klaw": "^3.0.0",
     "marked": "^0.7.0",
     "material-design-icons-iconfont": "^5.0.1",
     "simplencrypt": "^1.0.0",

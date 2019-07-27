@@ -91,13 +91,12 @@
 </template>
 
 <script>
+import { remote, shell } from 'electron'
 import pdf from 'pdfjs-dist/webpack'
 import { version } from '@/../package.json'
 import { getPDF } from '@/epdf/reader'
 import { epdfFilter } from '@/epdf'
 
-const electron = require('electron')
-const remote = electron.remote
 const currentWindow = remote.getCurrentWindow()
 
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
@@ -211,7 +210,7 @@ export default {
       currentWindow.webContents.openDevTools()
     },
     openUrl (url) {
-      electron.shell.openExternal(url)
+      shell.openExternal(url)
     },
     open () {
       remote.dialog.showOpenDialog(currentWindow, { filters: epdfFilter }, paths => {

@@ -9,9 +9,9 @@ environment:
   GH_TOKEN:
     secure: HHISy+sGq57hKlEtc0o7esy0gVWqL+0LZjmvVQa38W66OfqEs/LBhJhtI6MIC66y
   PSK:
-    secure: mQUAAIIajC5y3YTk+xMxymjd7Yr57kbjAHQKwPQ2m+4=
+    secure: X8G3tFsCpvnexKiUdEjL/w==
   PSKSALT:
-    secure: c3Apj8ig8QbjO4EvQH7ZMA==
+    secure: D5L7WQ5XuE3R1jbqWzctEA==
 
 image: Visual Studio 2017
 
