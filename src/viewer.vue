@@ -67,7 +67,7 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-content ref="content" class="content">
+    <v-content ref="content" class="main-content">
       <v-container fluid grid-list-md>
         <v-layout align-content-center justify-space-around>
           <v-card>
@@ -129,7 +129,7 @@ export default {
   mounted () {
     const main = this.$refs.content
     this.wrapper = main.$el.children[0]
-    this.wrapper.classList.add('content-wrap')
+    this.wrapper.classList.add('main-content-wrap')
     if (!this.epdfPath) {
       this.showAlert = true
       this.alert = '未找到文件'
