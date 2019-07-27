@@ -101,7 +101,7 @@ export default {
     title: '',
     index: 1,
     rendering: false,
-    scales: [0.5, 1, 1.5, 2],
+    scales: [0.5, 1, 1.5, 2, 2.5, 5],
     rotation: 0,
     wrapper: null,
     showAlert: false,
@@ -116,20 +116,22 @@ export default {
       this.showAlert = true
       this.alert = '未找到文件'
     } else {
-      getPDF(this.epdfPath)
-        .then(data => {
-          pdf
-            .getDocument({ data })
-            .promise
-            .then(doc => {
-              this.doc = doc
-              this.render(this.index = 1)
-            })
-        })
-        .catch(e => {
-          this.showAlert = true
-          this.alert = e.message
-        })
+      setTimeout(() => {
+        getPDF(this.epdfPath)
+          .then(data => {
+            pdf
+              .getDocument({ data })
+              .promise
+              .then(doc => {
+                this.doc = doc
+                this.render(this.index = 1)
+              })
+          })
+          .catch(e => {
+            this.showAlert = true
+            this.alert = e.message
+          })
+      }, 1000)
     }
   },
   methods: {
@@ -206,16 +208,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.content {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-}
-.content-wrap {
-  overflow: scroll;
-}
-</style>

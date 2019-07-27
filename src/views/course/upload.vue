@@ -21,7 +21,7 @@ import folderUpload from '@/components/folderupload.vue'
 import { bus } from '@/plugins/bus'
 
 export default {
-  name: 'electronFileUpload',
+  name: 'upload',
   components: {
     fileUpload,
     // eslint-disable-next-line vue/no-unused-components

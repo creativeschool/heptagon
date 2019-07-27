@@ -8,9 +8,10 @@
         <v-btn text to="/">首页</v-btn>
         <v-btn text to="/info">同步信息</v-btn>
         <v-btn text to="/client" v-if="!isElectron">下载客户端</v-btn>
+        <v-btn text to="/tool" v-else>实用工具</v-btn>
       </v-toolbar-items>
     </v-app-bar>
-    <v-content>
+    <v-content ref="content" class="content">
       <v-container fluid fill-height grid-list-md>
         <router-view/>
       </v-container>
@@ -85,6 +86,9 @@ export default {
     } finally {
       this.loading = false
     }
+  },
+  mounted () {
+    this.$refs.content.$el.children[0].classList.add('content-wrap')
   },
   errorCaptured (err, vm, info) {
     this.showToast(err.message)

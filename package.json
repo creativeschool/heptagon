@@ -25,6 +25,7 @@
     "marked": "^0.7.0",
     "material-design-icons-iconfont": "^5.0.1",
     "simplencrypt": "^1.0.0",
+    "tmp": "^0.1.0",
     "uuid": "^3.3.2",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@types/pdfjs-dist": "^2.0.1",
+    "@types/tmp": "^0.1.0",
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-plugin-eslint": "^3.9.0",
     "@vue/cli-service": "^3.9.3",
