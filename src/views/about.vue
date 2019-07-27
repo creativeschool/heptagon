@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-center justify-center>
+  <v-layout align-content-center justify-center>
     <v-flex xs12 md6 lg4 xl3>
       <v-card>
         <v-card-title>关于</v-card-title>

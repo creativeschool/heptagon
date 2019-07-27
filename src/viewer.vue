@@ -69,7 +69,7 @@
     </v-app-bar>
     <v-content ref="content" class="main-content">
       <v-container fluid grid-list-md>
-        <v-layout align-content-center justify-space-around>
+        <v-layout align-center justify-space-around>
           <v-card>
             <v-alert v-model="showAlert" type="error">
               {{ alert }}
