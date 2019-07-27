@@ -4,6 +4,7 @@
       <v-flex xs12>
         <v-card>
           <v-card-actions>
+            <v-checkbox v-model="showRemoved" label="显示删除的文件"/>
             <v-spacer/>
             <v-btn @click="load" color="primary">同步文件</v-btn>
           </v-card-actions>
@@ -52,12 +53,12 @@
         <template v-else>
           <v-card>
             <v-card-text>
-              <v-text-field label="当前路径" v-model.lazy="realpath" hide-details @blur="path = realpath" @keyup.native.enter="path = realpath"/>
+              <v-text-field :label="path[0] === '/' ? '当前路径' : '搜索'" v-model.lazy="path"/>
             </v-card-text>
             <v-divider/>
             <template v-if="displayFiles.length || displayFolders.length">
               <v-list subheader two-line>
-                <v-list-item @click="path = path.substr(0, path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1)" :disabled="path === '/'">
+                <v-list-item @click="path = path.substr(0, path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1)" :disabled="path === '/' || !path.startsWith('/')">
                   <v-list-item-avatar>
                     <v-icon>mdi-arrow-up</v-icon>
                   </v-list-item-avatar>
@@ -85,7 +86,7 @@
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{ name }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ item.versions.length }}版本</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ item.tags.join(', ') || '无标签' }} - {{ item.versions.length }}版本</v-list-item-subtitle>
                   </v-list-item-content>
                   <v-list-item-action>
                     <v-btn icon @click="dialogId = item._id, dialog = true">
@@ -158,6 +159,7 @@ import { bus } from '@/plugins/bus'
 import { generateTreeviewData } from '@/plugins/trie'
 import { fileIcon } from '@/plugins/icons'
 import fileDetail from '@/components/filedetail.vue'
+import escape from 'escape-string-regexp'
 
 export default {
   name: 'file',
@@ -166,19 +168,21 @@ export default {
   },
   props: ['id'],
   data: () => ({
+    /** @type {import('@/db/file').File[]} */
     files: [],
     displayFolders: [],
     displayFiles: [],
     loading: false,
     path: '/',
-    realpath: '/',
+    // realpath: '/',
     isElectron: process.env.IS_ELECTRON,
     tree: [],
     selection: [],
     active: [],
     dialog: false,
     dialogId: null,
-    showTree: false
+    showTree: false,
+    showRemoved: false
   }),
   methods: {
     load () {
@@ -186,7 +190,11 @@ export default {
       syncFile(this.id)
         .then(() => files.where('course').equals(this.id).toArray())
         .then(files => {
-          this.files = files
+          if (this.showRemoved) {
+            this.files = files
+          } else {
+            this.files = files.filter(f => !f.tags.some(t => t === '已删除'))
+          }
           this.tree = generateTreeviewData(this.files)
         })
         .then(() => this.filter())
@@ -196,7 +204,7 @@ export default {
         })
     },
     filter () {
-      if (this.path.startsWith('/')) {
+      if (this.path[0] === '/') {
         this.filterPath()
       } else {
         this.filterSearch()
@@ -204,10 +212,12 @@ export default {
     },
     filterSearch () {
       this.displayFolders = []
-      this.displayFiles = []
+      const regexp = new RegExp(escape(this.path))
+      this.displayFiles = this.files.filter(x => regexp.test(x.path)).map(x => [x.path.substr(x.path.lastIndexOf('/') + 1), x])
     },
     filterPath () {
       if (this.path.endsWith('/')) {
+        // TODO Optimize algorithm using trie
         const display = this.files.filter(x => x.path.startsWith(this.path))
         const folders = new Map()
         this.displayFiles = []
@@ -259,10 +269,15 @@ export default {
     },
     path: {
       handler () {
-        if (this.path !== this.realpath) {
-          this.realpath = this.path
-        }
+        // if (this.path !== this.realpath) {
+        //   this.realpath = this.path
+        // }
         this.filter()
+      }
+    },
+    showRemoved: {
+      handler () {
+        this.load()
       }
     }
   }

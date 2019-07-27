@@ -49,7 +49,6 @@ export const officeToEPDF = async (src, dst, args = defaultArgs) => {
 export const provideEPDF = async (src, args = defaultArgs) => {
   const tmp = fileSync({ postfix: '.epdf' })
   await officeToEPDF(src, tmp.name, args)
-  console.log(tmp.name)
   const hash = await provideNative(tmp.name)
   tmp.removeCallback()
   return hash

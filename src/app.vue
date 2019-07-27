@@ -91,7 +91,6 @@ export default {
     this.$refs.content.$el.children[0].classList.add('content-wrap')
   },
   errorCaptured (err, vm, info) {
-    console.err(err)
     this.showToast(err.message)
   }
 }
