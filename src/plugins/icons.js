@@ -13,7 +13,8 @@ const add = (exts, icon) => {
   [['pptx', 'ppt', 'pptm', 'potx', 'potm', 'ppsx', 'ppsm', 'pps', 'ppam', 'ppa'], 'mdi-file-powerpoint'],
   [['doc', 'docx', 'rtf'], 'mdi-file-word'],
   [['png', 'jpeg', 'jpg', 'gif', 'ico', 'tif', 'tiff', 'psd', 'psb', 'ami', 'apx', 'bmp', 'bpg', 'brk', 'cur', 'dds', 'dng', 'exr', 'fpx', 'gbr', 'img', 'jbig2', 'jb2', 'jng', 'jxr', 'pbm', 'pgf', 'pic', 'raw', 'webp', 'eps'], 'mdi-image'],
-  [['webm', 'mkv', 'flv', 'vob', 'ogv', 'ogg', 'gifv', 'avi', 'mov', 'qt', 'wmv', 'yuv', 'rm', 'rmvb', 'mp4', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'm2v'], 'mdi-video']
+  [['webm', 'mkv', 'flv', 'vob', 'ogv', 'ogg', 'gifv', 'avi', 'mov', 'qt', 'wmv', 'yuv', 'rm', 'rmvb', 'mp4', 'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'm2v'], 'mdi-video'],
+  [['pdf', 'epdf'], 'mdi-file-pdf-box']
 ].forEach(a => add(...a))
 
 /**

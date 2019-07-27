@@ -166,7 +166,8 @@ export default {
     },
     async download (version) {
       const token = await getDownloadToken(this.id, version)
-      const url = axios.defaults.baseURL + '/download/' + token
+      const filename = `${this.file.versions[version].name}.${this.file.versions[version].type}`
+      const url = axios.defaults.baseURL + '/download/' + token + '?filename=' + filename
       core.openUrl(url)
     }
   },

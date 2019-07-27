@@ -3,6 +3,7 @@ import { binPath } from './path'
 import { spawnSync } from 'child_process'
 import { fileSync } from 'tmp'
 import { convertPDF } from '@/epdf/writer'
+import { provideNative } from '@/plugins/content'
 
 const exe = resolve(join(binPath, 'OfficeToPDF.exe'))
 const defaultArgs = [
@@ -30,6 +31,8 @@ export const officeFilters = [
   { name: 'OpenOffice', extensions: ['odt', 'odp', 'ods'] }
 ]
 
+export const supportedExts = officeFilters.map(x => x.extensions).flat()
+
 export const officeToPDF = (src, dst, args = defaultArgs) => {
   const { status } = spawnSync(exe, [src, dst, ...args], { stdio: 'ignore', shell: true })
   return status
@@ -41,4 +44,13 @@ export const officeToEPDF = async (src, dst, args = defaultArgs) => {
   if (result) throw new Error('转换错误：' + result)
   await convertPDF(tmp.name, dst)
   tmp.removeCallback()
+}
+
+export const provideEPDF = async (src, args = defaultArgs) => {
+  const tmp = fileSync({ postfix: '.epdf' })
+  await officeToEPDF(src, tmp.name, args)
+  console.log(tmp.name)
+  const hash = await provideNative(tmp.name)
+  tmp.removeCallback()
+  return hash
 }

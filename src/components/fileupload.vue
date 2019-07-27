@@ -10,10 +10,11 @@
       <v-text-field label="文件名" v-model="filename"/>
       <v-text-field label="版本名" v-model="vername"/>
       <v-text-field label="类型" v-model="vertype"/>
+      <v-checkbox label="添加公开EPDF版本" v-model="convert"/>
     </v-card-text>
     <v-card-actions>
       <v-spacer/>
-      <v-btn color="primary" @click="create">上传</v-btn>
+      <v-btn color="primary" @click="create" :loading="loading">上传</v-btn>
     </v-card-actions>
   </v-tab-item>
 </template>
@@ -22,6 +23,7 @@
 import { createFile } from '@/db/file'
 import { provide } from '@/plugins/content'
 import { bus } from '@/plugins/bus'
+import { provideEPDF } from '../bin/officetopdf'
 
 export default {
   name: 'fileUpload',
@@ -33,17 +35,44 @@ export default {
     filename: '',
     vername: '',
     vertype: '',
-    exist: false
+    exist: false,
+    convert: false,
+    loading: false
   }),
   props: ['id'],
   methods: {
     create () {
-      provide(this.file)
-        .then(hash => createFile(this.id, this.remote + this.filename, this.tags, [ { hash, name: this.vername, type: this.vertype } ]))
-        .then(() => {
-          bus.$emit('toast', '上传成功')
-          this.$router.push('/course/' + this.id + '/file')
-        })
+      this.loading = true
+      // Make sure UI is updated
+      setTimeout(() => {
+        if (this.convert) {
+          Promise.all([provide(this.file), provideEPDF(this.file.path)])
+            .then(([o, c]) => {
+              const convertVer = this.vername.startsWith('!') ? this.vername : '!' + this.vername
+              return createFile(this.id, this.remote + this.filename, this.tags, [
+                { hash: o, name: this.vername, type: this.vertype },
+                { hash: c, name: convertVer, type: 'epdf' }
+              ])
+            })
+            .then(() => {
+              bus.$emit('toast', '上传成功')
+              this.$router.push('/course/' + this.id + '/file')
+            })
+            .finally(() => {
+              this.loading = false
+            })
+        } else {
+          provide(this.file)
+            .then(hash => createFile(this.id, this.remote + this.filename, this.tags, [ { hash, name: this.vername, type: this.vertype } ]))
+            .then(() => {
+              bus.$emit('toast', '上传成功')
+              this.$router.push('/course/' + this.id + '/file')
+            })
+            .finally(() => {
+              this.loading = false
+            })
+        }
+      }, 100)
     }
   },
   watch: {
