@@ -2,6 +2,7 @@
 
 import path from 'path'
 import { app, protocol, BrowserWindow } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 import { existsSync } from 'fs'
 
@@ -110,6 +111,7 @@ app.on('ready', async () => {
     }
   }
   startup()
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Exit cleanly on request from parent process in development mode.
