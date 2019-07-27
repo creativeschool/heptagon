@@ -84,7 +84,7 @@ export default {
 
 <style scoped>
 .content {
-  max-height: 200px;
+  height: 5rem;
   overflow: auto;
 }
 </style>

@@ -11,7 +11,7 @@
         <v-btn text to="/tool" v-else>实用工具</v-btn>
       </v-toolbar-items>
     </v-app-bar>
-    <v-content ref="content" class="content">
+    <v-content ref="content" class="main-content">
       <v-container fluid fill-height grid-list-md>
         <router-view/>
       </v-container>
@@ -88,7 +88,7 @@ export default {
     }
   },
   mounted () {
-    this.$refs.content.$el.children[0].classList.add('content-wrap')
+    this.$refs.content.$el.children[0].classList.add('main-content-wrap')
   },
   errorCaptured (err, vm, info) {
     this.showToast(err.message)
