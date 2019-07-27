@@ -1,5 +1,3 @@
-const { bus } = require('../bus')
-
 /* global GIT_HASH, GIT_BRANCH, BUILD_DATE, BUILD_MACHINE */
 
 const electron = require('electron')
@@ -25,7 +23,6 @@ module.exports = {
     currentWindow.minimize()
   },
   devTools () {
-    bus.$emit('toast', '仅供开发人员使用')
     currentWindow.webContents.openDevTools()
   },
   openUrl (url) {

@@ -4,7 +4,23 @@
       <v-avatar size="32" class="mr-2">
         <img src="@/../public/logo.png"/>
       </v-avatar>
-      <v-btn text @click="devTools" style="-webkit-app-region: no-drag">开发者工具</v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn text color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
+        </template>
+        <v-list dense>
+          <v-list-item @click="open">
+            <v-list-item-title>打开</v-list-item-title>
+          </v-list-item>
+          <v-divider/>
+          <v-list-item @click="devTools" v-if="isDevelopment">
+            <v-list-item-title>开发者工具</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="close">
+            <v-list-item-title>退出</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <v-spacer/>
         {{ title }}{{ title ? ' - ' : '' }}EPDF Viewer
       <v-spacer/>
@@ -77,7 +93,8 @@
 <script>
 import pdf from 'pdfjs-dist/webpack'
 import { version } from '@/../package.json'
-import { getPDF } from './epdf/reader'
+import { getPDF } from '@/epdf/reader'
+import { epdfFilter } from '@/epdf'
 
 const electron = require('electron')
 const remote = electron.remote
@@ -100,13 +117,14 @@ export default {
     scale: 1,
     title: '',
     index: 1,
-    rendering: false,
+    rendering: true,
     scales: [0.5, 1, 1.5, 2, 2.5, 5],
     rotation: 0,
     wrapper: null,
     showAlert: false,
     alert: '',
-    epdfPath: decodeURIComponent(location.hash.substr(1))
+    epdfPath: decodeURIComponent(location.hash.substr(1)),
+    isDevelopment: process.env.NODE_ENV !== 'production'
   }),
   mounted () {
     const main = this.$refs.content
@@ -117,24 +135,31 @@ export default {
       this.alert = '未找到文件'
     } else {
       setTimeout(() => {
-        getPDF(this.epdfPath)
-          .then(data => {
-            pdf
-              .getDocument({ data })
-              .promise
-              .then(doc => {
-                this.doc = doc
-                this.render(this.index = 1)
-              })
-          })
-          .catch(e => {
-            this.showAlert = true
-            this.alert = e.message
-          })
+        this.load()
       }, 1000)
     }
   },
   methods: {
+    load () {
+      this.rendering = true
+      getPDF(this.epdfPath)
+        .then(data => {
+          pdf
+            .getDocument({ data })
+            .promise
+            .then(doc => {
+              this.doc = doc
+              this.render(this.index = 1)
+            })
+        })
+        .catch(e => {
+          this.showAlert = true
+          this.alert = e.message
+        })
+        .finally(() => {
+          this.rendering = false
+        })
+    },
     render () {
       this.rendering = true
       this.doc
@@ -187,6 +212,14 @@ export default {
     },
     openUrl (url) {
       electron.shell.openExternal(url)
+    },
+    open () {
+      remote.dialog.showOpenDialog(currentWindow, { filters: epdfFilter }, paths => {
+        if (paths && paths.length) {
+          this.epdfPath = paths[0]
+          this.load()
+        }
+      })
     }
   },
   watch: {

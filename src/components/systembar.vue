@@ -15,7 +15,7 @@
           <v-list-item-title>设置</v-list-item-title>
         </v-list-item>
         <v-divider/>
-        <v-list-item @click="devTools">
+        <v-list-item @click="devTools" v-if="isDevelopment">
           <v-list-item-title>开发者工具</v-list-item-title>
         </v-list-item>
         <v-list-item @click="close">
@@ -65,7 +65,8 @@ export default {
   },
   data: () => ({
     title: '',
-    isElectron: process.env.IS_ELECTRON
+    isElectron: process.env.IS_ELECTRON,
+    isDevelopment: process.env.NODE_ENV !== 'production'
   }),
   methods: {
     minimize: core.minimize,
