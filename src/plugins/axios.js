@@ -1,7 +1,9 @@
 import Axios from 'axios'
 import { get } from '@/db/config'
 
-const defaultBaseUrl = 'http://127.0.0.1:3000/api'
+/* global HEXAGON_URL */
+
+const defaultBaseUrl = HEXAGON_URL
 
 export const axios = Axios.create({ baseURL: defaultBaseUrl })
 

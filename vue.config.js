@@ -24,7 +24,8 @@ module.exports = {
         'GIT_BRANCH': JSON.stringify(gitRevision('branch')),
         'APP_NAME': JSON.stringify('教学资源开放平台'),
         'BUILD_DATE': JSON.stringify((new Date()).toLocaleString()),
-        'BUILD_MACHINE': JSON.stringify(os.hostname())
+        'BUILD_MACHINE': JSON.stringify(os.hostname()),
+        'HEXAGON_URL': JSON.stringify('https://hexagon.zhangzisu.cn/api')
       })
     ]
   },
