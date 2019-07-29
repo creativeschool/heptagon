@@ -41,9 +41,9 @@ import { version } from '@/../package.json'
 import core from '@/plugins/core'
 import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { isLoggedIn, syncUser } from '@/db/user'
-import { get } from './db/config'
-import { syncUserUcmap } from './db/ucmap'
-import { syncAllCourse } from './db/course'
+import { get } from '@/db/config'
+import { syncUserUcmap } from '@/db/ucmap'
+import { syncAllCourse } from '@/db/course'
 
 /* global APP_NAME, GIT_HASH, GIT_BRANCH */
 

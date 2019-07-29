@@ -1,14 +1,14 @@
 import { axios } from '@/plugins/axios'
+import { bus } from '@/plugins/bus'
+import { provide } from '@/plugins/content'
+import { compareArraySimple, compareArrayComplex } from '@/plugins/utils'
 import debug from 'debug'
 import { db } from './dexie'
 import { isLoggedIn } from './user'
-import { bus } from '@/plugins/bus'
 import { getCourse } from './course'
 import { get, set } from './config'
 import { minArraySyncInterval } from './limits'
 import { getCurrentPriv } from './ucmap'
-import { provide } from '@/plugins/content'
-import { compareArraySimple, compareArrayComplex } from '@/plugins/utils'
 
 /**
  * @typedef {{name:string, type:string, hash?:string, file?:string}} Version
