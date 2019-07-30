@@ -1,7 +1,7 @@
 import { axios } from '@/plugins/axios'
 import debug from 'debug'
 import { isLoggedIn } from './user'
-import { getCourse } from './course'
+import { getCourse, courses } from './course'
 import { db } from './dexie'
 import { get, set } from './config'
 import { bus } from '@/plugins/bus'
@@ -68,5 +68,14 @@ export const editMsg = async (msgId, content, tags) => {
   await axios.post('/course/msg/edit', delta)
   log(`@${msgId} Edit 🆗`)
   await msgs.update(msgId, { content, tags })
+  bus.$emit('toast', `通知更新成功`)
+}
+
+export const syncAllMsg = async () => {
+  if (!await isLoggedIn()) throw new Error('需要登录')
+  const all = await courses.orderBy('updated').reverse().toArray()
+  for (const one of all) {
+    await syncMsg(one._id, false, true)
+  }
   bus.$emit('toast', `通知更新成功`)
 }

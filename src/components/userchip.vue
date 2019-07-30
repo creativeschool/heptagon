@@ -1,6 +1,6 @@
 <template>
   <v-chip :color="color" outlined>
-    <v-icon>mdi-account</v-icon>
+    <v-icon left>mdi-account</v-icon>
     {{ user.name }}
   </v-chip>
 </template>
