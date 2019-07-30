@@ -17,7 +17,7 @@ export const users = db.users
  */
 export const signin = async (login, pass) => {
   await reinit()
-  const res = await axios.post('/signin', { login, pass })
+  const res = await axios.post('/signin/common', { login, pass })
   log(res.data)
   axios.defaults.headers['x-access-token'] = res.data
   await set('x-access-token', res.data)
@@ -44,7 +44,7 @@ export const syncUser = async (userId) => {
   log(`Sync user ${userId} last ${last}`)
   const now = +new Date()
   if (now - last < minObjectSyncInterval) return
-  const res = await axios.post('/user/sync', { userId, last })
+  const res = await axios.post('/login/user/sync', { userId, last })
   await users.put(Object.assign({ lastFetch: now }, res.data))
   if (userId === await get('current-user')) bus.$emit('chrome_update')
 }
@@ -64,7 +64,7 @@ export const getUser = async (userId) => {
  */
 export const editProfile = async (email) => {
   if (!await isLoggedIn()) throw new Error('需要登录')
-  await axios.post('/user/edit', { email })
+  await axios.post('/login/user/edit', { email })
   await users.update(await get('current-user'), { email })
 }
 
@@ -74,6 +74,6 @@ export const editProfile = async (email) => {
  */
 export const chpwd = async (oldPwd, newPwd) => {
   if (!await isLoggedIn()) throw new Error('需要登录')
-  const res = await axios.post('/user/pass', { old: oldPwd, new: newPwd })
+  const res = await axios.post('/login/user/pass', { old: oldPwd, new: newPwd })
   await set('x-access-token', res.data)
 }

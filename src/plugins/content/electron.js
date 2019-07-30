@@ -32,7 +32,7 @@ export const provideNative = file => new Promise((resolve, reject) => {
           if (res.data) return resolve(sha)
           const form = new NodeFormData()
           form.append('file', fs.createReadStream(file))
-          return axios.post('/content/provide', form, { headers: form.getHeaders() })
+          return axios.post('/login/content/provide', form, { headers: form.getHeaders() })
         })
         .then(res => {
           if (res) return resolve(res.data)

@@ -20,7 +20,7 @@ export const syncCourse = async (courseId) => {
   log(`Sync course ${courseId} last ${last}`)
   const now = +new Date()
   if (now - last < minObjectSyncInterval) return
-  const res = await axios.post('/course/sync', { courseId, last })
+  const res = await axios.post('/login/course/sync', { courseId, last })
   await courses.put(Object.assign({ lastFetch: now }, res.data))
 }
 

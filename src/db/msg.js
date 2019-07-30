@@ -28,7 +28,7 @@ export const syncMsg = async (courseId, noLimit, noToast) => {
   const last = await get('msg-sync-' + courseId) || 0
   const now = +new Date()
   if (!noLimit && now - last < minArraySyncInterval) return
-  const res = await axios.post('/course/msg/sync', { courseId, last })
+  const res = await axios.post('/login/course/msg/sync', { courseId, last })
   log(`@${obj.name} fetched ${res.data.length} msgs`)
   await msgs.bulkPut(res.data)
   await set('msg-sync-' + courseId, now)
@@ -47,7 +47,7 @@ export const createMsg = async (courseId, content, tags) => {
   const obj = await getCourse(courseId)
   const priv = await getCurrentPriv(courseId)
   if (!priv.msg) throw new Error('无权限')
-  const res = await axios.post('/course/msg/new', { courseId, content, tags })
+  const res = await axios.post('/login/course/msg/new', { courseId, content, tags })
   log(`@${obj.name} created ${res.data}`)
   await syncMsg(courseId, true, true)
   bus.$emit('toast', `课程${obj.name}通知发布成功`)
@@ -65,7 +65,7 @@ export const editMsg = async (msgId, content, tags) => {
   const delta = { courseId: msg.course, msgId }
   if (content !== msg.content) delta.content = content
   if (!compareArraySimple(msg.tags, tags)) delta.tags = tags
-  await axios.post('/course/msg/edit', delta)
+  await axios.post('/login/course/msg/edit', delta)
   log(`@${msgId} Edit 🆗`)
   await msgs.update(msgId, { content, tags })
   bus.$emit('toast', `通知更新成功`)

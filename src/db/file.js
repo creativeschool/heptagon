@@ -30,7 +30,7 @@ export const syncFile = async (courseId, noLimit, noToast) => {
   const last = await get('file-sync-' + courseId) || 0
   const now = +new Date()
   if (!noLimit && now - last < minArraySyncInterval) return
-  const res = await axios.post('/course/file/sync', { courseId, last })
+  const res = await axios.post('/login/course/file/sync', { courseId, last })
   log(`@${obj.name} fetched ${res.data.length} files`)
   await files.bulkPut(res.data)
   await set('file-sync-' + courseId, now)
@@ -51,7 +51,7 @@ export const createFile = async (courseId, path, tags, versions) => {
   const priv = await getCurrentPriv(courseId)
   if (!path.startsWith(priv.scope)) throw new Error('无权限')
   await normalizeVersions(versions)
-  const res = await axios.post('/course/file/new', { courseId, path, tags, versions })
+  const res = await axios.post('/login/course/file/new', { courseId, path, tags, versions })
   log(`@${obj.name} created ${res.data}`)
   await syncFile(courseId, true, true)
   bus.$emit('toast', `课程${obj.name}文件创建成功`)
@@ -73,7 +73,7 @@ export const editFile = async (fileId, path, tags, versions) => {
   if (!compareArraySimple(file.tags, tags)) delta.tags = tags
   await normalizeVersions(versions)
   if (!compareArrayComplex(file.versions, versions, ['name', 'type', 'hash'])) delta.versions = versions
-  await axios.post('/course/file/edit', delta)
+  await axios.post('/login/course/file/edit', delta)
   log(`@${fileId} Edit 🆗`)
   await files.update(fileId, { path, tags, versions })
   bus.$emit('toast', `文件更新成功`)
@@ -97,6 +97,6 @@ export const getDownloadToken = async (fileId, versionId) => {
   if (!await isLoggedIn()) throw new Error('需要登录')
   const file = await files.get(fileId)
   if (!file) throw new Error('无此文件')
-  const res = await axios.post('/course/file/content', { courseId: file.course, fileId, versionId })
+  const res = await axios.post('/login/course/file/content', { courseId: file.course, fileId, versionId })
   return res.data
 }

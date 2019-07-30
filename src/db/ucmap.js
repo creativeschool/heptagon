@@ -20,7 +20,7 @@ export const syncUserUcmap = async () => {
   const last = await get('ucmap-sync') || 0
   const now = +new Date()
   if (now - last < minArraySyncInterval) return
-  const res = await axios.post('/user/ucmap', { last })
+  const res = await axios.post('/login/user/ucmap', { last })
   log(`Fetched ucmap from user length=${res.data.length}`)
   await ucmap.bulkPut(res.data)
   await set('ucmap-sync', now)
@@ -35,7 +35,7 @@ export const syncCourseUcmap = async (courseId) => {
   const last = await get('ucmap-sync-' + courseId)
   const now = +new Date()
   if (now - last < minArraySyncInterval) return
-  const res = await axios.post('/course/ucmap', { courseId, last })
+  const res = await axios.post('/login/course/ucmap', { courseId, last })
   log(`Fetched ucmap from course ${obj.name} length=${res.data.length}`)
   await ucmap.bulkPut(res.data)
   await set('ucmap-sync-' + courseId, now)

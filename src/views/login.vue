@@ -23,6 +23,7 @@
 import { signin, isLoggedIn, syncUser, getTokenDetails } from '@/db/user'
 import { bus } from '@/plugins/bus'
 import { syncAccessToken } from '@/plugins/axios'
+import { handleError } from '@/plugins/error'
 import { get } from '@/db/config'
 import { syncUserUcmap } from '@/db/ucmap'
 import { syncAllCourse } from '@/db/course'
@@ -50,6 +51,7 @@ export default {
         this.$router.replace('/')
       } catch (e) {
         bus.$emit('toast', '登录错误')
+        handleError(e)
         this.error = true
       } finally {
         this.loading = false

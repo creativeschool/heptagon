@@ -35,11 +35,12 @@
 </template>
 
 <script>
-import { bus } from '@/plugins/bus'
 import systemBar from '@/components/systembar'
 import { version } from '@/../package.json'
+import { bus } from '@/plugins/bus'
 import core from '@/plugins/core'
 import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
+import { handleError } from '@/plugins/error'
 import { isLoggedIn, syncUser } from '@/db/user'
 import { get } from '@/db/config'
 import { syncUserUcmap } from '@/db/ucmap'
@@ -83,6 +84,7 @@ export default {
       }
     } catch (e) {
       core.showErrorBox('初始化错误', e.message)
+      handleError(e)
       this.$router.replace('/settings')
     } finally {
       this.loading = false
@@ -93,6 +95,7 @@ export default {
   },
   errorCaptured (err, vm, info) {
     this.showToast(err.message)
+    handleError(err)
   }
 }
 </script>
