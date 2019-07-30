@@ -1,8 +1,10 @@
 <template>
   <v-layout justify-center align-center>
-    <v-flex sm12 md6 xl3 lg4>
+    <v-flex xs12 sm8 md6 lg4 xl3>
       <v-card>
-        <v-card-title>登录</v-card-title>
+        <v-img height="200px" class="white--text" :src="require('@/assets/login.jpg')">
+          <v-card-title class="align-end fill-height">登录</v-card-title>
+        </v-img>
         <v-card-text>
           <v-alert :value="loggedIn" type="warning" prominent >您已经登录。反复登录将被记录，且会丢失本地设置。</v-alert>
           <v-text-field v-model="login" :error="error" label="登录名" :disabled="loading" />
