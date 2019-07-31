@@ -94,7 +94,7 @@
 import { remote, shell } from 'electron'
 import pdf from 'pdfjs-dist/webpack'
 import { version } from '@/../package.json'
-import { epdfFilter, readFileAsEPDF } from '@/epdf'
+import { epdfFilter, readFileAsEPDF } from 'epdf-dist'
 
 const currentWindow = remote.getCurrentWindow()
 

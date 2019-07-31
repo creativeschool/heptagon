@@ -39,7 +39,7 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      externals: ['form-data', 'axios'],
+      externals: ['form-data', 'axios', 'epdf-dist'],
       builderOptions: {
         directories: {
           buildResources: 'resources'
