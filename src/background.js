@@ -31,7 +31,7 @@ const createMainWindow = () => {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   } else {
     createProtocol('app')
     win.loadURL('app://./index.html')
