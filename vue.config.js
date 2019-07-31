@@ -39,7 +39,7 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
-      externals: ['form-data', 'axios', 'simplencrypt'],
+      externals: ['form-data', 'axios'],
       builderOptions: {
         directories: {
           buildResources: 'resources'

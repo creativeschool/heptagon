@@ -51,8 +51,7 @@
 import { remote } from 'electron'
 import { bus } from '@/plugins/bus'
 import { normalizePath } from '@/plugins/path'
-import { convertPDF } from '@/epdf/writer'
-import { pdfFilter, epdfFilter } from '@/epdf'
+import { pdfFilter, epdfFilter, convertPDFToEPDF } from '@/../epdf'
 import { officeFilters, officeToPDF, officeToEPDF } from '@/bin/officetopdf'
 
 const current = remote.getCurrentWindow()
@@ -78,7 +77,7 @@ export default {
         if (paths && paths.length) {
           remote.dialog.showSaveDialog(current, { filters: epdfFilter, defaultPath: basename(paths[0], '.pdf') }, path => {
             if (path) {
-              convertPDF(paths[0], path)
+              convertPDFToEPDF(paths[0], path, 1, {})
                 .then(() => {
                   bus.$emit('toast', '转换成功！')
                 })

@@ -94,8 +94,7 @@
 import { remote, shell } from 'electron'
 import pdf from 'pdfjs-dist/webpack'
 import { version } from '@/../package.json'
-import { getPDF } from '@/epdf/reader'
-import { epdfFilter } from '@/epdf'
+import { epdfFilter, readFileAsEPDF } from '@/../epdf'
 
 const currentWindow = remote.getCurrentWindow()
 
@@ -141,10 +140,10 @@ export default {
   methods: {
     load () {
       this.rendering = true
-      getPDF(this.epdfPath)
-        .then(data => {
+      readFileAsEPDF(this.epdfPath)
+        .then(([version, meta, data]) => {
           pdf
-            .getDocument({ data })
+            .getDocument({ data: new Uint8Array(data) })
             .promise
             .then(doc => {
               this.doc = doc

@@ -2,7 +2,7 @@ import { join, resolve } from 'path'
 import { binPath } from './path'
 import { spawnSync } from 'child_process'
 import { fileSync } from 'tmp'
-import { convertPDF } from '@/epdf/writer'
+import { convertPDFToEPDF } from '@/../epdf'
 import { provideNative } from '@/plugins/content'
 
 const exe = resolve(join(binPath, 'OfficeToPDF.exe'))
@@ -42,7 +42,7 @@ export const officeToEPDF = async (src, dst, args = defaultArgs) => {
   const tmp = fileSync({ postfix: '.pdf' })
   const result = officeToPDF(src, tmp.name, args)
   if (result) throw new Error('转换错误：' + result)
-  await convertPDF(tmp.name, dst)
+  await convertPDFToEPDF(tmp.name, dst, 1, {})
   tmp.removeCallback()
 }
 
@@ -56,7 +56,7 @@ export const provideOfficeEPDF = async (src, args = defaultArgs) => {
 
 export const providePdfEPDF = async (src) => {
   const tmp = fileSync({ postfix: '.epdf' })
-  await convertPDF(src, tmp.name)
+  await convertPDFToEPDF(src, tmp.name, 1, {})
   const hash = await provideNative(tmp.name)
   tmp.removeCallback()
   return hash
