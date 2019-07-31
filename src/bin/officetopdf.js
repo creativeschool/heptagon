@@ -2,7 +2,7 @@ import { join, resolve } from 'path'
 import { binPath } from './path'
 import { spawnSync } from 'child_process'
 import { fileSync } from 'tmp'
-import { convertPDFToEPDF } from '@/../epdf'
+import { convertPDFToEPDF } from '@/epdf'
 import { provideNative } from '@/plugins/content'
 
 const exe = resolve(join(binPath, 'OfficeToPDF.exe'))

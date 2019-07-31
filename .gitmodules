@@ -1,0 +1,3 @@
+[submodule "src/epdf"]
+	path = src/epdf
+	url = git@github.com:ZhangZisu/epdf.git

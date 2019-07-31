@@ -51,7 +51,7 @@
 import { remote } from 'electron'
 import { bus } from '@/plugins/bus'
 import { normalizePath } from '@/plugins/path'
-import { pdfFilter, epdfFilter, convertPDFToEPDF } from '@/../epdf'
+import { pdfFilter, epdfFilter, convertPDFToEPDF } from '@/epdf'
 import { officeFilters, officeToPDF, officeToEPDF } from '@/bin/officetopdf'
 
 const current = remote.getCurrentWindow()
