@@ -1,6 +1,6 @@
 import { axios } from '@/plugins/axios'
 import debug from 'debug'
-import { isLoggedIn } from './user'
+import { checkLogin } from './user'
 import { getCourse, courses } from './course'
 import { db } from './dexie'
 import { get, set } from './config'
@@ -23,7 +23,7 @@ export const msgs = db.msgs
  * @param {boolean} noToast
  */
 export const syncMsg = async (courseId, noLimit, noToast) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const obj = await getCourse(courseId)
   const last = await get('msg-sync-' + courseId) || 0
   const now = +new Date()
@@ -43,7 +43,7 @@ export const syncMsg = async (courseId, noLimit, noToast) => {
  * @param {string[]} tags
  */
 export const createMsg = async (courseId, content, tags) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const obj = await getCourse(courseId)
   const priv = await getCurrentPriv(courseId)
   if (!priv.msg) throw new Error('无权限')
@@ -59,7 +59,7 @@ export const createMsg = async (courseId, content, tags) => {
  * @param {string[]} tags
  */
 export const editMsg = async (msgId, content, tags) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const msg = await msgs.get(msgId)
   if (!msg) throw new Error('无此消息')
   const delta = { courseId: msg.course, msgId }
@@ -72,7 +72,7 @@ export const editMsg = async (msgId, content, tags) => {
 }
 
 export const syncAllMsg = async () => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const all = await courses.orderBy('updated').reverse().toArray()
   for (const one of all) {
     await syncMsg(one._id, false, true)

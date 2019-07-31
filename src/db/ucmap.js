@@ -1,7 +1,7 @@
 import { axios } from '@/plugins/axios'
 import debug from 'debug'
 import { db } from './dexie'
-import { isLoggedIn } from './user'
+import { checkLogin } from './user'
 import { get, set } from './config'
 import { getCourse } from './course'
 import { minArraySyncInterval } from './limits'
@@ -16,7 +16,7 @@ const log = debug('hep:db:ucmap')
 export const ucmap = db.ucmap
 
 export const syncUserUcmap = async () => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const last = await get('ucmap-sync') || 0
   const now = +new Date()
   if (now - last < minArraySyncInterval) return
@@ -30,7 +30,7 @@ export const syncUserUcmap = async () => {
  * @param {string} courseId
  */
 export const syncCourseUcmap = async (courseId) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const obj = await getCourse(courseId)
   const last = await get('ucmap-sync-' + courseId)
   const now = +new Date()

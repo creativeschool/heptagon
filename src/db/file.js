@@ -4,7 +4,7 @@ import { provide } from '@/plugins/content'
 import { compareArraySimple, compareArrayComplex } from '@/plugins/utils'
 import debug from 'debug'
 import { db } from './dexie'
-import { isLoggedIn } from './user'
+import { checkLogin } from './user'
 import { getCourse } from './course'
 import { get, set } from './config'
 import { minArraySyncInterval } from './limits'
@@ -25,7 +25,7 @@ export const files = db.files
  * @param {boolean} noToast
  */
 export const syncFile = async (courseId, noLimit, noToast) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const obj = await getCourse(courseId)
   const last = await get('file-sync-' + courseId) || 0
   const now = +new Date()
@@ -46,7 +46,7 @@ export const syncFile = async (courseId, noLimit, noToast) => {
  * @param {Version[]} versions
  */
 export const createFile = async (courseId, path, tags, versions) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const obj = await getCourse(courseId)
   const priv = await getCurrentPriv(courseId)
   if (!path.startsWith(priv.scope)) throw new Error('无权限')
@@ -64,7 +64,7 @@ export const createFile = async (courseId, path, tags, versions) => {
  * @param {Version[]} versions
  */
 export const editFile = async (fileId, path, tags, versions) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const file = await files.get(fileId)
   if (!file) throw new Error('无此文件')
   const priv = await getCurrentPriv(file.course)
@@ -94,7 +94,7 @@ const normalizeVersions = async versions => {
 }
 
 export const getDownloadToken = async (fileId, versionId) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const file = await files.get(fileId)
   if (!file) throw new Error('无此文件')
   const res = await axios.post('/login/course/file/content', { courseId: file.course, fileId, versionId })

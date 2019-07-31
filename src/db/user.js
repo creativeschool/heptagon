@@ -23,8 +23,12 @@ export const signin = async (login, pass) => {
   await set('x-access-token', res.data)
 }
 
-export const getTokenDetails = async () => {
+export const checkLogin = async () => {
   if (!await isLoggedIn()) throw new Error('需要登录')
+}
+
+export const getTokenDetails = async () => {
+  await checkLogin()
   const info = await axios.get('/token/detail')
   await set('current-user', info.data.user)
 }
@@ -38,7 +42,7 @@ export const isLoggedIn = async () => {
  * @param {string} userId
  */
 export const syncUser = async (userId) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const user = await users.get(userId)
   const last = user ? user.lastFetch || 0 : 0
   log(`Sync user ${userId} last ${last}`)
@@ -63,7 +67,7 @@ export const getUser = async (userId) => {
  * @param {string} email
  */
 export const editProfile = async (email) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   await axios.post('/login/user/edit', { email })
   await users.update(await get('current-user'), { email })
 }
@@ -73,7 +77,7 @@ export const editProfile = async (email) => {
  * @param {string} newPwd
  */
 export const chpwd = async (oldPwd, newPwd) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const res = await axios.post('/login/user/pass', { old: oldPwd, new: newPwd })
   await set('x-access-token', res.data)
 }

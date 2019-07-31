@@ -1,7 +1,7 @@
 import { axios } from '@/plugins/axios'
 import debug from 'debug'
 import { db } from './dexie'
-import { isLoggedIn, users, syncUser } from './user'
+import { checkLogin, users, syncUser } from './user'
 import { ucmap } from './ucmap'
 import { get } from './config'
 import { minObjectSyncInterval } from './limits'
@@ -14,7 +14,7 @@ export const courses = db.courses
  * @param {string} courseId
  */
 export const syncCourse = async (courseId) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const course = await courses.get(courseId)
   const last = course ? course.lastFetch || 0 : 0
   log(`Sync course ${courseId} last ${last}`)
@@ -25,7 +25,7 @@ export const syncCourse = async (courseId) => {
 }
 
 export const syncAllCourse = async () => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const mappers = await ucmap.where({ user: await get('current-user') }).toArray()
   for (const mapper of mappers) {
     const course = await courses.get(mapper.course)
@@ -59,7 +59,7 @@ export const getUsersFromCourse = async (course) => {
 }
 
 export const syncAllUserFromCourse = async (course) => {
-  if (!await isLoggedIn()) throw new Error('需要登录')
+  await checkLogin()
   const mappers = await ucmap.where({ course }).toArray()
   for (const mapper of mappers) {
     const user = await users.get(mapper.user)
