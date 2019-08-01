@@ -90,7 +90,7 @@ export default {
   methods: {
     load () {
       bus.$emit('title', '修改用户信息')
-      get('current-user')
+      return get('current-user')
         .then(id => getUser(id))
         .then(user => {
           this.email = user.email

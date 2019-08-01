@@ -187,7 +187,7 @@ export default {
   methods: {
     load () {
       this.loading = true
-      syncFile(this.id)
+      return syncFile(this.id)
         .then(() => files.where('course').equals(this.id).toArray())
         .then(files => {
           if (this.showRemoved) {

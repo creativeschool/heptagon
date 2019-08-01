@@ -140,9 +140,9 @@ export default {
   methods: {
     load () {
       this.rendering = true
-      readFileAsEPDF(this.epdfPath)
+      return readFileAsEPDF(this.epdfPath)
         .then(([version, meta, data]) => {
-          pdf
+          return pdf
             .getDocument({ data: new Uint8Array(data) })
             .promise
             .then(doc => {

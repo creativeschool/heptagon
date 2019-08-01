@@ -66,7 +66,7 @@ export default {
   methods: {
     load () {
       this.loading = true
-      syncMsg(this.id)
+      return syncMsg(this.id)
         .then(() => msgs.where('course').equals(this.id).reverse().toArray())
         .then(msgs => {
           this.msgs = msgs
