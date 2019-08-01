@@ -29,8 +29,17 @@ export const checkLogin = async () => {
 
 export const getTokenDetails = async () => {
   await checkLogin()
-  const info = await axios.get('/token/detail')
-  await set('current-user', info.data.user)
+  try {
+    const info = await axios.get('/token/detail')
+    await set('current-user', info.data.user)
+  } catch (e) {
+    if (e.isAxiosError && e.response.status === 403) {
+      bus.$emit('toast', '无效登录Token')
+      return reinit(true)
+    } else {
+      throw e
+    }
+  }
 }
 
 export const isLoggedIn = async () => {

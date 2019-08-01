@@ -41,7 +41,7 @@ import { bus } from '@/plugins/bus'
 import core from '@/plugins/core'
 import { syncBaseUrl, syncAccessToken } from '@/plugins/axios'
 import { handleError } from '@/plugins/error'
-import { isLoggedIn, syncUser } from '@/db/user'
+import { isLoggedIn, syncUser, getTokenDetails } from '@/db/user'
 import { get } from '@/db/config'
 import { syncUserUcmap } from '@/db/ucmap'
 import { syncAllCourse } from '@/db/course'
@@ -78,6 +78,7 @@ export default {
       await syncBaseUrl()
       await syncAccessToken()
       if (await isLoggedIn()) {
+        await getTokenDetails()
         await syncUser(await get('current-user'))
         await syncUserUcmap()
         await syncAllCourse()

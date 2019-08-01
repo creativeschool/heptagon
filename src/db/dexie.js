@@ -9,11 +9,16 @@ versions.forEach(([i, s]) => db.version(i).stores(s))
 
 const configsWillSave = ['base-url']
 
-export const reinit = async () => {
+/**
+ * @param {boolean} notoast
+ */
+export const reinit = async (notoast) => {
   const configs = await Promise.all(configsWillSave.map(x => get(x)))
   await db.delete()
   await db.open()
   await Promise.all(configsWillSave.map((x, i) => set(x, configs[i])))
-  bus.$emit('toast', '数据库初始化成功')
+  if (!notoast) {
+    bus.$emit('toast', '数据库初始化成功')
+  }
   bus.$emit('chrome_update')
 }
