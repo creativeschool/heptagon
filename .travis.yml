@@ -23,6 +23,7 @@ before_install:
   - echo "-----BEGIN RSA PRIVATE KEY-----" > $HOME/.ssh/id_rsa
   - echo "${GH_KEY}" | tr " " "\n" >> $HOME/.ssh/id_rsa
   - echo "-----END RSA PRIVATE KEY-----" >> $HOME/.ssh/id_rsa
+  - chmod 600 $HOME/.ssh/id_rsa
 
 install:
   - git submodule update --init --recursive

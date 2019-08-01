@@ -4181,8 +4181,8 @@ env-paths@^1.0.0:
   integrity sha1-QWgTO0K7BcOKNbGuQ5fIKYqzaeA=
 
 "epdf-dist@git+ssh://git@github.com/ZhangZisu/epdf-dist.git":
-  version "1.0.1"
-  resolved "git+ssh://git@github.com/ZhangZisu/epdf-dist.git#5702942c50fa7ff1360b6a6a17e8737871f1fa06"
+  version "1.0.2"
+  resolved "git+ssh://git@github.com/ZhangZisu/epdf-dist.git#cd920f38b60cf2363e7b6eafd3632af2cee99537"
   dependencies:
     readable-stream "^3.4.0"
 
