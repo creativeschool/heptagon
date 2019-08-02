@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="256" src="https://raw.githubusercontent.com/creativeschool/heptagon/master/public/logo.png">
+  <img width="256" src="/logo.png">
 </p>
 <p align="center">
   <img alt="Appveyor status" src="https://img.shields.io/appveyor/ci/creativeschool/heptagon.svg?logo=appveyor&logoColor=white&style=flat-square">
