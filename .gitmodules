@@ -1,0 +1,3 @@
+[submodule "heptagon-core"]
+	path = heptagon-core
+	url = git@github.com:ZhangZisu/heptagon-core.git

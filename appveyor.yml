@@ -33,9 +33,10 @@ install:
   - git submodule update --init --recursive
   - npm i -g npm
   - npm i -g yarn
-  - yarn
 
 build_script:
+  - cd heptagon-core
+  - yarn
   - yarn electron:generate-icons
   - yarn electron:build
 

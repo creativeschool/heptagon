@@ -1,8 +1,0 @@
-import './config'
-import './course'
-import './dexie'
-import './file'
-import './msg'
-import './log'
-import './stats'
-import './user'

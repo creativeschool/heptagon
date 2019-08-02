@@ -27,9 +27,10 @@ before_install:
 
 install:
   - git submodule update --init --recursive
-  - yarn
 
 script:
+  - cd heptagon-core
+  - yarn
   - yarn electron:generate-icons
   - yarn electron:build
 
